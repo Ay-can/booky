@@ -57,16 +57,16 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     .block(Block::default().title("Books").borders(Borders::ALL))
     .widths(&[
         Constraint::Length(20),
-        Constraint::Length(10),
+        Constraint::Length(15),
         Constraint::Length(10),
         Constraint::Length(10),
         Constraint::Length(10),
         Constraint::Length(10),
     ])
     .column_spacing(10)
-    .highlight_style(Style::default().add_modifier(Modifier::BOLD))
+    .highlight_style(Style::default().add_modifier(Modifier::REVERSED))
     .highlight_symbol(">>");
-    frame.render_widget(table, chunks[1]);
+    frame.render_stateful_widget(table, chunks[1], &mut app.state);
 
     let footer = Block::default().title("Footer").borders(Borders::ALL);
     frame.render_widget(footer, chunks[2]);

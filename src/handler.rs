@@ -14,8 +14,8 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 app.quit();
             }
         }
-        KeyCode::Right => {}
-        KeyCode::Left => {}
+        KeyCode::Up | KeyCode::Char('k') => app.previous(),
+        KeyCode::Down | KeyCode::Char('j') => app.next(),
         _ => {}
     }
     Ok(())
