@@ -1,8 +1,8 @@
 use tui::{
     backend::Backend,
-    layout::{Alignment, Constraint, Direction, Layout},
+    layout::{Alignment, Constraint, Direction, Layout, Rect},
     style::{Color, Modifier, Style},
-    widgets::{Block, BorderType, Borders, Paragraph, Row, Table},
+    widgets::{Block, BorderType, Borders, Clear, Paragraph, Row, Table},
     Frame,
 };
 
@@ -69,5 +69,42 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     frame.render_stateful_widget(table, chunks[1], &mut app.state);
 
     let footer = Block::default().title("Footer").borders(Borders::ALL);
-    frame.render_widget(footer, chunks[2]);
+    let info_box = Paragraph::new("Add: 'n'").block(footer);
+    frame.render_widget(info_box, chunks[2]);
+
+    // Popup
+    if app.show_popup {
+        let block = Block::default()
+            .title("Create New Book")
+            .borders(Borders::ALL);
+        let area = centered_rect(60, 20, frame.size());
+        frame.render_widget(Clear, area);
+        frame.render_widget(block, area);
+    }
+}
+
+fn centered_rect(percent_x: u16, percent_y: u16, r: Rect) -> Rect {
+    let popup_layout = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints(
+            [
+                Constraint::Percentage((100 - percent_y) / 2),
+                Constraint::Percentage(percent_y),
+                Constraint::Percentage((100 - percent_y) / 2),
+            ]
+            .as_ref(),
+        )
+        .split(r);
+
+    Layout::default()
+        .direction(Direction::Horizontal)
+        .constraints(
+            [
+                Constraint::Percentage((100 - percent_x) / 2),
+                Constraint::Percentage(percent_x),
+                Constraint::Percentage((100 - percent_x) / 2),
+            ]
+            .as_ref(),
+        )
+        .split(popup_layout[1])[1]
 }

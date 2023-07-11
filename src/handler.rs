@@ -14,6 +14,12 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 app.quit();
             }
         }
+        // Open help popup
+
+        // Add a new book
+        KeyCode::Char('n') => {
+            app.show_popup = !app.show_popup;
+        }
         KeyCode::Up | KeyCode::Char('k') => app.previous(),
         KeyCode::Down | KeyCode::Char('j') => app.next(),
         _ => {}

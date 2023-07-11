@@ -8,6 +8,7 @@ pub type AppResult<T> = std::result::Result<T, Box<dyn error::Error>>;
 #[derive(Debug)]
 pub struct App<'a> {
     pub running: bool,
+    pub show_popup: bool,
     pub state: TableState,
     pub items: Vec<Vec<&'a str>>,
 }
@@ -16,6 +17,7 @@ impl<'a> Default for App<'a> {
     fn default() -> Self {
         Self {
             running: true,
+            show_popup: false,
             state: TableState::default(),
             items: vec![
                 vec!["Row11", "Row12", "Row13"],
