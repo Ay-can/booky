@@ -1,8 +1,20 @@
+use serde::{Deserialize, Serialize};
 use std::error;
+use std::fs;
 use tui::widgets::TableState;
 
 /// Application result type.
 pub type AppResult<T> = std::result::Result<T, Box<dyn error::Error>>;
+
+const JSON_PATH: &str = "../data/books.json";
+
+#[derive(Serialize, Deserialize, Clone)]
+pub struct Book {
+    pub title: String,
+    pub author: String,
+    pub genre: String,
+    pub rating: usize,
+}
 
 /// Application.
 #[derive(Debug)]
@@ -84,5 +96,11 @@ impl<'a> App<'a> {
             None => 0,
         };
         self.state.select(Some(i));
+    }
+
+    pub fn read_json(&mut self) -> Result<Vec<Book>, Box<dyn error::Error>> {
+        let json_content = fs::read_to_string(JSON_PATH)?;
+        let parsed: Vec<Book> = serde_json::from_str(&json_content)?;
+        Ok(parsed)
     }
 }
