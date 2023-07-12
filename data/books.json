@@ -1,1 +1,9 @@
-[]
+[
+   {
+      "id":1,
+      "title":"Can't Hurt Me",
+      "author":"David Goggins",
+      "genre":"Self-help",
+      "rating":10
+   }
+]
