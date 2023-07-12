@@ -10,6 +10,7 @@ const JSON_PATH: &str = "../data/books.json";
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Book {
+    pub id: usize,
     pub title: String,
     pub author: String,
     pub genre: String,
