@@ -2,7 +2,7 @@ use tui::{
     backend::Backend,
     layout::{Alignment, Constraint, Direction, Layout, Rect},
     style::{Color, Modifier, Style},
-    text::Span,
+    text::Line,
     widgets::{Block, BorderType, Borders, Cell, Clear, Paragraph, Row, Table},
     Frame,
 };
@@ -67,9 +67,7 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
 
     // Popup
     if app.show_popup {
-        let block = Block::default()
-            .title("Create New Book")
-            .borders(Borders::ALL);
+        let block = Block::default().title("Add New Book").borders(Borders::ALL);
         let area = centered_rect(60, 20, frame.size());
         frame.render_widget(Clear, area);
         frame.render_widget(block, area);
