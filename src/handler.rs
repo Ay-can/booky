@@ -1,4 +1,4 @@
-use crate::app::{App, AppResult};
+use crate::app::{App, AppResult, BookState};
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 
 /// Handles the key events and updates the state of [`App`].
@@ -21,7 +21,8 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 app.remove_json_at_index().expect("Failed to remove");
             }
         }
-        KeyCode::Char('n') => {
+        KeyCode::Char('a') => {
+            app.book_edit_state = Some(BookState::default());
             app.show_popup = !app.show_popup;
         }
         KeyCode::Up | KeyCode::Char('k') => {

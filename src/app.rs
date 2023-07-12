@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 use std::error;
 use std::fs;
 use tui::widgets::TableState;
+use tui_textarea::TextArea;
 
 /// Application result type.
 pub type AppResult<T> = std::result::Result<T, Box<dyn error::Error>>;
@@ -17,27 +18,53 @@ pub struct Book {
     pub rating: usize,
 }
 
+pub enum BookEditFocus {
+    Title,
+    Author,
+    ConfirmBtn,
+    CancelBtn,
+}
+
+pub struct BookState<'a> {
+    pub title: TextArea<'a>,
+    pub author: TextArea<'a>,
+    pub focus: BookEditFocus,
+    pub is_edit: bool,
+}
+
+impl Default for BookState<'_> {
+    fn default() -> Self {
+        BookState {
+            title: TextArea::default(),
+            author: TextArea::default(),
+            focus: BookEditFocus::Title,
+            is_edit: false,
+        }
+    }
+}
+
 /// Application.
-#[derive(Debug)]
-pub struct App {
+pub struct App<'a> {
     pub running: bool,
     pub show_popup: bool,
     pub state: TableState,
+    pub book_edit_state: Option<BookState<'a>>,
     pub items: Vec<Book>,
 }
 
-impl Default for App {
+impl Default for App<'_> {
     fn default() -> Self {
         Self {
             running: true,
             show_popup: false,
             state: TableState::default(),
+            book_edit_state: None,
             items: Vec::new(),
         }
     }
 }
 
-impl App {
+impl<'a> App<'a> {
     /// Constructs a new instance of [`App`].
     pub fn new() -> Self {
         Self::default()
