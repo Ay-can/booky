@@ -1,16 +1,16 @@
 [
-	{
-		"id": 1,
-		"title": "Can't hurt me",
-		"author": "David Goggins",
-		"genre": "Self-help",
-		"rating": 10
-	},
-	{
-		"id": 2,
-		"title": "Deepwork",
-		"author": "Cal Newport",
-		"genre": "Self-help",
-		"rating": 9
-	}
+   {
+      "id":1,
+      "title":"Can't hurt me",
+      "author":"David Goggins",
+      "genre":"Self-help",
+      "rating":10
+   },
+   {
+      "id":2,
+      "title":"Deepwork",
+      "author":"Cal Newport",
+      "genre":"Self-help",
+      "rating":9
+   }
 ]

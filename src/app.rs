@@ -87,4 +87,20 @@ impl App {
         self.items = parsed.clone();
         Ok(parsed)
     }
+    pub fn remove_json_at_index(&mut self) -> Result<(), Box<dyn error::Error>> {
+        // If the selected state glitches when removed it is because
+        // of these lines. Instead of deleting the state create a parsed vec
+        // like we did above
+        if let Some(selected) = self.state.selected() {
+            self.items.remove(selected);
+            fs::write(JSON_PATH, &serde_json::to_vec(&self.items)?)?;
+
+            if selected > 0 {
+                self.state.select(Some(selected - 1))
+            } else {
+                self.state.select(Some(0))
+            }
+        }
+        Ok(())
+    }
 }
