@@ -29,12 +29,7 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
         .borders(Borders::ALL);
     frame.render_widget(menu_block, chunks[0]);
 
-    // Fix this and the read_json() method in app.rs
-    // Very yucky
-    let book_list = match app.read_json() {
-        Ok(t) => t,
-        Err(_) => app.items.clone(),
-    };
+    let book_list = app.read_json().expect("Not able to read file");
     let rows: Vec<Row> = book_list
         .iter()
         .map(|i| {
