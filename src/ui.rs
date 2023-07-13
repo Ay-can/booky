@@ -28,7 +28,8 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
         .borders(Borders::ALL);
     frame.render_widget(menu_block, chunks[0]);
 
-    let book_list = app.read_json().expect("Failed to read");
+    //let book_list = app.read_json().expect("Failed to read");
+    let book_list = app.read_json_3().expect("Failed");
     let rows: Vec<Row> = book_list
         .iter()
         .map(|i| {

@@ -11,6 +11,7 @@ fn main() -> AppResult<()> {
     let mut app = App::new();
 
     //Create booky/books.json in $HOME
+    //Change this later.. it should only contain config files afterall..
     app.create_json();
 
     // Initialize the terminal user interface.

@@ -15,11 +15,13 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             }
         }
         // Remove book
+        /*
         KeyCode::Char('d') => {
             if app.items.len() != 0 {
                 app.remove_json_at_index().expect("Failed to remove");
             }
         }
+        */
         KeyCode::Char('a') => {
             app.book_edit_state = Some(BookState::default());
             app.show_popup = !app.show_popup;

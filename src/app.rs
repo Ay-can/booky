@@ -117,12 +117,31 @@ impl<'a> App<'a> {
         self.items = parsed.clone();
         Ok(parsed)
     }
+    /*
     pub fn read_json_2(&mut self) -> Result<Vec<Book>, Box<dyn error::Error>> {
         let books: Vec<Book> = {
             let data = fs::read_to_string(JSON_PATH).expect("Failed to read");
             serde_json::from_str(&data).unwrap()
         };
         Ok(books)
+    }
+    */
+
+    // Close your eyes, this is temp fix
+    pub fn read_json_3(&mut self) -> Result<Vec<Book>, Box<dyn error::Error>> {
+        if let Some(proj_dirs) = ProjectDirs::from("", "", "booky") {
+            let config_dir: &Path = proj_dirs.config_dir();
+            let new_path = config_dir.join("books.json");
+            let books: Vec<Book> = {
+                let config_contents = fs::read_to_string(&new_path).expect("Failed to read");
+                serde_json::from_str(&config_contents).unwrap()
+            };
+            self.items = books.clone();
+            Ok(books)
+        } else {
+            let books: Vec<Book> = vec![];
+            Ok(books)
+        }
     }
 
     pub fn create_json(&mut self) {
