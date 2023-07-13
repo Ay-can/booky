@@ -31,7 +31,7 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
 
     let book_list = match app.read_json() {
         Ok(t) => t,
-        Err(error) => panic!("Error"),
+        Err(_) => app.items.clone(),
     };
     let rows: Vec<Row> = book_list
         .iter()
