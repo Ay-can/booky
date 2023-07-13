@@ -29,7 +29,7 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
         .borders(Borders::ALL);
     frame.render_widget(menu_block, chunks[0]);
 
-    let book_list = app.read_json().expect("Not able to read file");
+    let book_list = app.read_json_2().unwrap();
     let rows: Vec<Row> = book_list
         .iter()
         .map(|i| {

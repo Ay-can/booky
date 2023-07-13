@@ -113,6 +113,13 @@ impl<'a> App<'a> {
         self.items = parsed.clone();
         Ok(parsed)
     }
+    pub fn read_json_2(&mut self) -> Result<Vec<Book>, Box<dyn error::Error>> {
+        let mut books: Vec<Book> = {
+            let data = fs::read_to_string(JSON_PATH).expect("Failed to read");
+            serde_json::from_str(&data).unwrap()
+        };
+        Ok(books)
+    }
     pub fn remove_json_at_index(&mut self) -> Result<(), Box<dyn error::Error>> {
         // If the selected state glitches when removed it is because
         // of these lines. Instead of deleting the state create a parsed vec
