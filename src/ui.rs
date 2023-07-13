@@ -1,12 +1,11 @@
-use crate::app::{App, Book, BookEditFocus};
+use crate::app::{App, BookEditFocus};
 use tui::{
     backend::Backend,
     layout::{Alignment, Constraint, Direction, Layout, Rect},
     style::{Color, Modifier, Style},
-    widgets::{Block, BorderType, Borders, Cell, Clear, Paragraph, Row, Table},
+    widgets::{Block, Borders, Clear, Paragraph, Row, Table},
     Frame,
 };
-use tui_textarea::TextArea;
 
 /// Renders the user interface widgets.
 pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
@@ -29,7 +28,7 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
         .borders(Borders::ALL);
     frame.render_widget(menu_block, chunks[0]);
 
-    let book_list = app.read_json_2().unwrap();
+    let book_list = app.read_json().expect("Failed to read");
     let rows: Vec<Row> = book_list
         .iter()
         .map(|i| {
@@ -122,7 +121,7 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
 
             let b1 = Block::default().title("Title").borders(Borders::ALL);
             let b2 = Block::default().title("Author").borders(Borders::ALL);
-            let b3 = Block::default().title("Keys").borders(Borders::ALL);
+            let _b3 = Block::default().title("Keys").borders(Borders::ALL);
 
             task.title.set_cursor_line_style(Style::default());
             task.author.set_cursor_line_style(Style::default());

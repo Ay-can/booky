@@ -114,7 +114,7 @@ impl<'a> App<'a> {
         Ok(parsed)
     }
     pub fn read_json_2(&mut self) -> Result<Vec<Book>, Box<dyn error::Error>> {
-        let mut books: Vec<Book> = {
+        let books: Vec<Book> = {
             let data = fs::read_to_string(JSON_PATH).expect("Failed to read");
             serde_json::from_str(&data).unwrap()
         };
