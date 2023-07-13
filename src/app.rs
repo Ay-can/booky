@@ -1,10 +1,10 @@
 use directories::ProjectDirs;
 use serde::{Deserialize, Serialize};
-use std::env;
+
 use std::error;
 use std::fs;
 use std::path::Path;
-use std::path::*;
+
 use tui::widgets::TableState;
 use tui_textarea::TextArea;
 
