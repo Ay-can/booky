@@ -39,10 +39,11 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
                 i.author.to_string(),
                 i.genre.to_string(),
                 i.rating.to_string(),
+                i.status.to_string(),
             ])
         })
         .collect();
-    let headers = Row::new(vec!["Id", "Title", "Author", "Genre", "Rating"]);
+    let headers = Row::new(vec!["Id", "Title", "Author", "Genre", "Rating", "Status"]);
 
     let table = Table::new(rows)
         .header(headers.style(Style::default().fg(Color::Yellow)))
@@ -52,6 +53,7 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
         .highlight_symbol(">>")
         .widths(&[
             Constraint::Length(10),
+            Constraint::Length(20),
             Constraint::Length(20),
             Constraint::Length(20),
             Constraint::Length(20),

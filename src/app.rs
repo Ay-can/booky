@@ -16,6 +16,7 @@ pub struct Book {
     pub author: String,
     pub genre: String,
     pub rating: usize,
+    pub status: String,
 }
 
 pub enum BookEditFocus {
