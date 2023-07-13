@@ -1,14 +1,17 @@
-use std::io;
-use tui::backend::CrosstermBackend;
-use tui::Terminal;
 use booky::app::{App, AppResult};
 use booky::event::{Event, EventHandler};
 use booky::handler::handle_key_events;
 use booky::tui::Tui;
+use std::io;
+use tui::backend::CrosstermBackend;
+use tui::Terminal;
 
 fn main() -> AppResult<()> {
     // Create an application.
     let mut app = App::new();
+
+    //Create booky/books.json in $HOME
+    app.create_json();
 
     // Initialize the terminal user interface.
     let backend = CrosstermBackend::new(io::stderr());

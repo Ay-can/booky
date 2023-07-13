@@ -1,6 +1,10 @@
+use directories::ProjectDirs;
 use serde::{Deserialize, Serialize};
+use std::env;
 use std::error;
 use std::fs;
+use std::path::Path;
+use std::path::*;
 use tui::widgets::TableState;
 use tui_textarea::TextArea;
 
@@ -120,6 +124,17 @@ impl<'a> App<'a> {
         };
         Ok(books)
     }
+
+    pub fn create_json(&mut self) {
+        if let Some(proj_dirs) = ProjectDirs::from("", "", "booky") {
+            let config_dir: &Path = proj_dirs.config_dir();
+            if !config_dir.exists() {
+                fs::create_dir(config_dir);
+                fs::write(config_dir.join("books.json"), "[]");
+            }
+        }
+    }
+
     pub fn remove_json_at_index(&mut self) -> Result<(), Box<dyn error::Error>> {
         // If the selected state glitches when removed it is because
         // of these lines. Instead of deleting the state create a parsed vec
