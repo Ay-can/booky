@@ -14,7 +14,6 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 app.quit();
             }
         }
-        // Add a new book
         // Remove book
         KeyCode::Char('d') => {
             if app.items.len() != 0 {

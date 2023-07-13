@@ -1,4 +1,4 @@
-use crate::app::{App, BookEditFocus};
+use crate::app::{App, Book, BookEditFocus};
 use tui::{
     backend::Backend,
     layout::{Alignment, Constraint, Direction, Layout, Rect},
@@ -29,7 +29,10 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
         .borders(Borders::ALL);
     frame.render_widget(menu_block, chunks[0]);
 
-    let book_list = app.read_json().expect("Failed to read books");
+    let book_list = match app.read_json() {
+        Ok(t) => t,
+        Err(error) => panic!("Error"),
+    };
     let rows: Vec<Row> = book_list
         .iter()
         .map(|i| {
