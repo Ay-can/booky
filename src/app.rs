@@ -106,6 +106,7 @@ impl<'a> App<'a> {
         self.state.select(Some(i));
     }
 
+    // Rewrite
     pub fn read_json(&mut self) -> Result<Vec<Book>, Box<dyn error::Error>> {
         let json_content = fs::read_to_string(JSON_PATH)?;
         let parsed: Vec<Book> = serde_json::from_str(&json_content)?;
