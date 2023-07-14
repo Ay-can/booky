@@ -40,7 +40,7 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                         status: String::from("Finished"),
                     };
 
-                    app.write_json(book);
+                    app.write_json(book).expect("Failed to add book");
                     app.show_popup = !app.show_popup;
                     None
                 }
