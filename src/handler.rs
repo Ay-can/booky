@@ -1,4 +1,4 @@
-use crate::app::{App, AppResult, BookEditFocus, BookState, InputMode, EDIT_WINDOW_FOCUS};
+use crate::app::{App, AppResult, Book, BookEditFocus, BookState, InputMode, EDIT_WINDOW_FOCUS};
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use int_enum::IntEnum;
 use std::error;
@@ -27,9 +27,20 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                     Some(task)
                 }
                 (KeyCode::Enter, BookEditFocus::ConfirmBtn) => {
+                    let id = app.items[app.items.len() - 1].id + 1;
                     let title = task.title.into_lines().join("\n");
                     let author = task.author.into_lines().join("\n");
-                    app.write_json(title, author);
+
+                    let book = Book {
+                        id: id,
+                        title: title,
+                        author: author,
+                        genre: String::from("Action"),
+                        rating: 10.0,
+                        status: String::from("Finished"),
+                    };
+
+                    app.write_json(book);
                     app.show_popup = !app.show_popup;
                     None
                 }
