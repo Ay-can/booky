@@ -11,8 +11,6 @@ use tui_textarea::TextArea;
 /// Application result type.
 pub type AppResult<T> = std::result::Result<T, Box<dyn error::Error>>;
 
-const JSON_PATH: &str = "../data/books.json";
-
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Book {
     pub id: usize,
