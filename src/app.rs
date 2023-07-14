@@ -19,7 +19,7 @@ pub struct Book {
     pub title: String,
     pub author: String,
     pub genre: String,
-    pub rating: usize,
+    pub rating: f64,
     pub status: String,
 }
 
@@ -117,15 +117,6 @@ impl<'a> App<'a> {
         self.items = parsed.clone();
         Ok(parsed)
     }
-    /*
-    pub fn read_json_2(&mut self) -> Result<Vec<Book>, Box<dyn error::Error>> {
-        let books: Vec<Book> = {
-            let data = fs::read_to_string(JSON_PATH).expect("Failed to read");
-            serde_json::from_str(&data).unwrap()
-        };
-        Ok(books)
-    }
-    */
 
     // Close your eyes, this is temp fix
     pub fn read_json_3(&mut self) -> Result<Vec<Book>, Box<dyn error::Error>> {
@@ -155,17 +146,18 @@ impl<'a> App<'a> {
     }
 
     pub fn remove_json_at_index(&mut self) -> Result<(), Box<dyn error::Error>> {
-        // If the selected state glitches when removed it is because
-        // of these lines. Instead of deleting the state create a parsed vec
-        // like we did above
-        if let Some(selected) = self.state.selected() {
-            self.items.remove(selected);
-            fs::write(JSON_PATH, &serde_json::to_vec(&self.items)?)?;
+        if let Some(proj_dirs) = ProjectDirs::from("", "", "booky") {
+            let config_dir: &Path = proj_dirs.config_dir();
+            let new_path = config_dir.join("books.json");
+            if let Some(selected) = self.state.selected() {
+                self.items.remove(selected);
+                fs::write(new_path, &serde_json::to_vec(&self.items)?)?;
 
-            if selected > 0 {
-                self.state.select(Some(selected - 1))
-            } else {
-                self.state.select(Some(0))
+                if selected > 0 {
+                    self.state.select(Some(selected - 1))
+                } else {
+                    self.state.select(Some(0))
+                }
             }
         }
         Ok(())

@@ -3,6 +3,7 @@ use tui::{
     backend::Backend,
     layout::{Alignment, Constraint, Direction, Layout, Rect},
     style::{Color, Modifier, Style},
+    text::Spans,
     widgets::{Block, Borders, Clear, Paragraph, Row, Table},
     Frame,
 };
@@ -22,11 +23,15 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
         )
         .split(frame.size());
 
+    // Show stats temp on the top
     let menu_block = Block::default()
         .title("Booky")
         .title_alignment(Alignment::Center)
         .borders(Borders::ALL);
-    frame.render_widget(menu_block, chunks[0]);
+    let books_count = Spans::from(format!("{}", app.items.len()));
+
+    let stats_block = Paragraph::new(books_count).block(menu_block);
+    frame.render_widget(stats_block, chunks[0]);
 
     //let book_list = app.read_json().expect("Failed to read");
     let book_list = app.read_json_3().expect("Failed");
