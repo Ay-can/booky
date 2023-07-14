@@ -148,6 +148,30 @@ impl<'a> App<'a> {
         }
     }
 
+    pub fn write_json(
+        &mut self,
+        title: String,
+        author: String,
+    ) -> Result<(), Box<dyn error::Error>> {
+        if let Some(proj_dirs) = ProjectDirs::from("", "", "booky") {
+            let config_dir: &Path = proj_dirs.config_dir();
+            let new_path = config_dir.join("books.json");
+            let last_item_id = self.items[self.items.len() - 1].id;
+            let new_id = last_item_id + 1;
+            let book = Book {
+                id: new_id,
+                title: title,
+                author: author,
+                genre: String::from(""),
+                rating: 10.0,
+                status: String::from(""),
+            };
+            self.items.push(book);
+            fs::write(new_path, &serde_json::to_vec(&self.items)?)?;
+        }
+        Ok(())
+    }
+
     pub fn remove_json_at_index(&mut self) -> Result<(), Box<dyn error::Error>> {
         if let Some(proj_dirs) = ProjectDirs::from("", "", "booky") {
             let config_dir: &Path = proj_dirs.config_dir();

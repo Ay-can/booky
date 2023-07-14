@@ -26,6 +26,17 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                     change_focus(&mut task, false)?;
                     Some(task)
                 }
+                (KeyCode::Enter, BookEditFocus::ConfirmBtn) => {
+                    let title = task.title.into_lines().join("\n");
+                    let author = task.author.into_lines().join("\n");
+                    app.write_json(title, author);
+                    app.show_popup = !app.show_popup;
+                    None
+                }
+                (KeyCode::Enter, BookEditFocus::CancelBtn) => {
+                    app.show_popup = !app.show_popup;
+                    None
+                }
                 (KeyCode::Enter, BookEditFocus::Title) => Some(task),
                 (_, BookEditFocus::Title) => {
                     task.title.input(key_event);
