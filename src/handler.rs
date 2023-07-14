@@ -1,10 +1,30 @@
-use crate::app::{App, AppResult, BookEditFocus, BookState, InputMode};
+use crate::app::{App, AppResult, BookEditFocus, BookState, InputMode, EDIT_WINDOW_FOCUS};
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
+use int_enum::IntEnum;
+use std::error;
+
+pub fn change_focus(task: &mut BookState<'_>, forward: bool) -> Result<(), Box<dyn error::Error>> {
+    let cycle = if forward {
+        (task.focus.int_value() + 1) % EDIT_WINDOW_FOCUS
+    } else {
+        (task.focus.int_value() - 1) % EDIT_WINDOW_FOCUS
+    };
+    task.focus = BookEditFocus::from_int(cycle)?;
+    Ok(())
+}
 
 /// Handles the key events and updates the state of [`App`].
 pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
     let updated_task = if let Some(mut task) = app.book_edit_state.take() {
         match (key_event.code, task.focus) {
+            (KeyCode::Tab, _) => {
+                change_focus(&mut task, true)?;
+                Some(task)
+            }
+            (KeyCode::BackTab, _) => {
+                change_focus(&mut task, false)?;
+                Some(task)
+            }
             (KeyCode::Enter, BookEditFocus::Title) => Some(task),
             (_, BookEditFocus::Title) => {
                 task.title.input(key_event);

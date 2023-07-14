@@ -1,6 +1,7 @@
 use directories::ProjectDirs;
 use serde::{Deserialize, Serialize};
 
+use int_enum::IntEnum;
 use std::error;
 use std::fs;
 use std::path::Path;
@@ -21,12 +22,15 @@ pub struct Book {
     pub status: String,
 }
 
-#[derive(Debug, Clone, Copy)]
+pub const EDIT_WINDOW_FOCUS: i8 = 4;
+
+#[repr(i8)]
+#[derive(Debug, IntEnum, Clone, Copy)]
 pub enum BookEditFocus {
-    Title,
-    Author,
-    ConfirmBtn,
-    CancelBtn,
+    Title = 0,
+    Author = 1,
+    ConfirmBtn = 2,
+    CancelBtn = 3,
 }
 
 pub enum InputMode {

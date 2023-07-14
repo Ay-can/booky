@@ -12,3 +12,4 @@ tui-textarea = { version = "0.2.0", git = "https://github.com/rhysd/tui-textarea
 serde = { version = "1.0", features = ["derive"]}
 serde_json = "1.0"
 directories = "5.0"
+int-enum = "0.5.0"
