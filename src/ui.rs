@@ -28,12 +28,11 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
         .title("Booky")
         .title_alignment(Alignment::Center)
         .borders(Borders::ALL);
-    let books_count = Spans::from(format!("{}", app.items.len()));
+    let books_count = Spans::from(format!("Total: {}", app.items.len()));
 
     let stats_block = Paragraph::new(books_count).block(menu_block);
     frame.render_widget(stats_block, chunks[0]);
 
-    //let book_list = app.read_json().expect("Failed to read");
     let book_list = app.read_json().expect("Failed");
     let rows: Vec<Row> = book_list
         .iter()

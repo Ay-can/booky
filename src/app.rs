@@ -21,11 +21,17 @@ pub struct Book {
     pub status: String,
 }
 
+#[derive(Debug, Clone, Copy)]
 pub enum BookEditFocus {
     Title,
     Author,
     ConfirmBtn,
     CancelBtn,
+}
+
+pub enum InputMode {
+    Normal,
+    Editing,
 }
 
 pub struct BookState<'a> {
@@ -53,6 +59,7 @@ pub struct App<'a> {
     pub state: TableState,
     pub book_edit_state: Option<BookState<'a>>,
     pub items: Vec<Book>,
+    pub input_mode: InputMode,
 }
 
 impl Default for App<'_> {
@@ -63,6 +70,7 @@ impl Default for App<'_> {
             state: TableState::default(),
             book_edit_state: None,
             items: Vec::new(),
+            input_mode: InputMode::Normal,
         }
     }
 }

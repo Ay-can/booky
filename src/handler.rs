@@ -1,8 +1,25 @@
-use crate::app::{App, AppResult, BookState};
+use crate::app::{App, AppResult, BookEditFocus, BookState, InputMode};
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 
 /// Handles the key events and updates the state of [`App`].
 pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
+    let updated_task = if let Some(mut task) = app.book_edit_state.take() {
+        match (key_event.code, task.focus) {
+            (KeyCode::Enter, BookEditFocus::Title) => Some(task),
+            (_, BookEditFocus::Title) => {
+                task.title.input(key_event);
+                Some(task)
+            }
+            (_, BookEditFocus::Author) => {
+                task.author.input(key_event);
+                Some(task)
+            }
+            _ => Some(task),
+        }
+    } else {
+        None
+    };
+    app.book_edit_state = updated_task;
     match key_event.code {
         // Exit application on `ESC` or `q`
         KeyCode::Esc | KeyCode::Char('q') => {
