@@ -109,15 +109,8 @@ impl<'a> App<'a> {
         self.state.select(Some(i));
     }
 
-    pub fn read_json(&mut self) -> Result<Vec<Book>, Box<dyn error::Error>> {
-        let json_content = fs::read_to_string(JSON_PATH)?;
-        let parsed: Vec<Book> = serde_json::from_str(&json_content)?;
-        self.items = parsed.clone();
-        Ok(parsed)
-    }
-
     // Close your eyes, this is temp fix
-    pub fn read_json_3(&mut self) -> Result<Vec<Book>, Box<dyn error::Error>> {
+    pub fn read_json(&mut self) -> Result<Vec<Book>, Box<dyn error::Error>> {
         if let Some(proj_dirs) = ProjectDirs::from("", "", "booky") {
             let config_dir: &Path = proj_dirs.config_dir();
             let new_path = config_dir.join("books.json");
