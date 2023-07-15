@@ -10,6 +10,7 @@ use tui::{
 
 /// Renders the user interface widgets.
 pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
+    // REFACTOR AND PUT EVERYTHING IN FUNCTIONS
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(5)
@@ -73,7 +74,7 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     // Popup
     if app.show_popup {
         let block = Block::default().title("Add New Book").borders(Borders::ALL);
-        let area = centered_rect(60, 30, frame.size());
+        let area = centered_rect(40, 40, frame.size());
         let block_inner = block.inner(area);
         frame.render_widget(Clear, area);
         frame.render_widget(Paragraph::new("").block(block), area);
@@ -82,6 +83,9 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
                 .direction(Direction::Vertical)
                 .constraints(
                     [
+                        Constraint::Length(3),
+                        Constraint::Length(3),
+                        Constraint::Length(3),
                         Constraint::Length(3),
                         Constraint::Length(3),
                         Constraint::Length(1),
@@ -101,7 +105,7 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
                     ]
                     .as_ref(),
                 )
-                .split(layout[2]);
+                .split(layout[5]);
 
             let (create_style, cancel_style, create_txt, cancel_txt) = match task.focus {
                 BookEditFocus::ConfirmBtn => (
@@ -126,10 +130,15 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
 
             let b1 = Block::default().title("Title").borders(Borders::ALL);
             let b2 = Block::default().title("Author").borders(Borders::ALL);
-            let _b3 = Block::default().title("Keys").borders(Borders::ALL);
+            let b3 = Block::default().title("Genre").borders(Borders::ALL);
+            let b4 = Block::default().title("Rating").borders(Borders::ALL);
+            let b5 = Block::default().title("Status").borders(Borders::ALL);
 
             task.title.set_cursor_line_style(Style::default());
             task.author.set_cursor_line_style(Style::default());
+            task.genre.set_cursor_line_style(Style::default());
+            task.rating.set_cursor_line_style(Style::default());
+            task.status.set_cursor_line_style(Style::default());
 
             task.title.set_block(b1);
 
@@ -155,6 +164,42 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
                 task.author.set_cursor_style(Style::default());
             }
             frame.render_widget(task.author.widget(), layout[1]);
+
+            task.genre.set_block(b3);
+            if let BookEditFocus::Genre = task.focus {
+                task.genre
+                    .set_style(Style::default().add_modifier(Modifier::BOLD));
+                task.genre
+                    .set_cursor_style(Style::default().add_modifier(Modifier::REVERSED));
+            } else {
+                task.genre.set_style(Style::default());
+                task.genre.set_cursor_style(Style::default());
+            }
+            frame.render_widget(task.genre.widget(), layout[2]);
+
+            task.rating.set_block(b4);
+            if let BookEditFocus::Rating = task.focus {
+                task.rating
+                    .set_style(Style::default().add_modifier(Modifier::BOLD));
+                task.rating
+                    .set_cursor_style(Style::default().add_modifier(Modifier::REVERSED));
+            } else {
+                task.rating.set_style(Style::default());
+                task.rating.set_cursor_style(Style::default());
+            }
+            frame.render_widget(task.rating.widget(), layout[3]);
+
+            task.status.set_block(b5);
+            if let BookEditFocus::Status = task.focus {
+                task.status
+                    .set_style(Style::default().add_modifier(Modifier::BOLD));
+                task.status
+                    .set_cursor_style(Style::default().add_modifier(Modifier::REVERSED));
+            } else {
+                task.status.set_style(Style::default());
+                task.status.set_cursor_style(Style::default());
+            }
+            frame.render_widget(task.status.widget(), layout[4]);
         }
     }
 }

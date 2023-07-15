@@ -1,7 +1,10 @@
-use crate::app::{App, AppResult, Book, BookEditFocus, BookState, InputMode, EDIT_WINDOW_FOCUS};
+use crate::app::{App, AppResult, Book, BookEditFocus, BookState, EDIT_WINDOW_FOCUS};
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use int_enum::IntEnum;
 use std::error;
+use tui::style::{Color, Style};
+use tui::widgets::{Block, Borders};
+use tui_textarea::TextArea;
 
 pub fn change_focus(task: &mut BookState<'_>, forward: bool) -> Result<(), Box<dyn error::Error>> {
     let cycle = if forward {
@@ -11,6 +14,23 @@ pub fn change_focus(task: &mut BookState<'_>, forward: bool) -> Result<(), Box<d
     };
     task.focus = BookEditFocus::from_int(cycle)?;
     Ok(())
+}
+
+// Put this function in ui.rs
+fn validate(textarea: &mut TextArea) -> bool {
+    if let Err(err) = textarea.lines()[0].parse::<f64>() {
+        textarea.set_style(Style::default().fg(Color::LightRed));
+        textarea.set_block(
+            Block::default()
+                .borders(Borders::ALL)
+                .title(format!("ERROR: {}", err)),
+        );
+        false
+    } else {
+        textarea.set_style(Style::default().fg(Color::LightGreen));
+        textarea.set_block(Block::default().borders(Borders::ALL).title("OK"));
+        true
+    }
 }
 
 /// Handles the key events and updates the state of [`App`].
@@ -30,14 +50,23 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                     let id = app.items[app.items.len() - 1].id + 1;
                     let title = task.title.into_lines().join("\n");
                     let author = task.author.into_lines().join("\n");
+                    let genre = task.genre.into_lines().join("\n");
+                    let check_rating = validate(&mut task.rating);
+                    let status = task.status.into_lines().join("\n");
+                    let mut rating = 0.0;
+
+                    if check_rating {
+                        rating = task.rating.lines()[0].parse::<f64>().unwrap();
+                        dbg!(rating);
+                    }
 
                     let book = Book {
                         id: id,
                         title: title,
                         author: author,
-                        genre: String::from("Action"),
-                        rating: 10.0,
-                        status: String::from("Finished"),
+                        genre: genre,
+                        rating: rating,
+                        status: status,
                     };
 
                     app.write_json(book).expect("Failed to add book");
@@ -55,6 +84,18 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 }
                 (_, BookEditFocus::Author) => {
                     task.author.input(key_event);
+                    Some(task)
+                }
+                (_, BookEditFocus::Genre) => {
+                    task.genre.input(key_event);
+                    Some(task)
+                }
+                (_, BookEditFocus::Rating) => {
+                    task.rating.input(key_event);
+                    Some(task)
+                }
+                (_, BookEditFocus::Status) => {
+                    task.status.input(key_event);
                     Some(task)
                 }
                 _ => Some(task),

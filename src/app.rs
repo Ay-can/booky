@@ -22,25 +22,26 @@ pub struct Book {
     pub status: String,
 }
 
-pub const EDIT_WINDOW_FOCUS: i8 = 4;
+pub const EDIT_WINDOW_FOCUS: i8 = 7;
 
 #[repr(i8)]
 #[derive(Debug, IntEnum, Clone, Copy)]
 pub enum BookEditFocus {
     Title = 0,
     Author = 1,
-    ConfirmBtn = 2,
-    CancelBtn = 3,
-}
-
-pub enum InputMode {
-    Normal,
-    Editing,
+    Genre = 2,
+    Rating = 3,
+    Status = 4,
+    ConfirmBtn = 5,
+    CancelBtn = 6,
 }
 
 pub struct BookState<'a> {
     pub title: TextArea<'a>,
     pub author: TextArea<'a>,
+    pub genre: TextArea<'a>,
+    pub rating: TextArea<'a>,
+    pub status: TextArea<'a>,
     pub focus: BookEditFocus,
     pub is_edit: bool,
 }
@@ -50,6 +51,9 @@ impl Default for BookState<'_> {
         BookState {
             title: TextArea::default(),
             author: TextArea::default(),
+            genre: TextArea::default(),
+            rating: TextArea::default(),
+            status: TextArea::default(),
             focus: BookEditFocus::Title,
             is_edit: false,
         }
@@ -63,7 +67,6 @@ pub struct App<'a> {
     pub state: TableState,
     pub book_edit_state: Option<BookState<'a>>,
     pub items: Vec<Book>,
-    pub input_mode: InputMode,
 }
 
 impl Default for App<'_> {
@@ -74,7 +77,6 @@ impl Default for App<'_> {
             state: TableState::default(),
             book_edit_state: None,
             items: Vec::new(),
-            input_mode: InputMode::Normal,
         }
     }
 }
