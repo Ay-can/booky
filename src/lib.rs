@@ -12,3 +12,6 @@ pub mod tui;
 
 /// Event handler.
 pub mod handler;
+
+/// Json reader
+pub mod reader;

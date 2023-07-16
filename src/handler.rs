@@ -1,4 +1,5 @@
 use crate::app::{App, AppResult, Book, BookEditFocus, BookState, EDIT_WINDOW_FOCUS};
+use crate::reader;
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use int_enum::IntEnum;
 use std::error;
@@ -57,7 +58,6 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
 
                     if check_rating {
                         rating = task.rating.lines()[0].parse::<f64>().unwrap();
-                        dbg!(rating);
                     }
 
                     let book = Book {
@@ -69,7 +69,8 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                         status: status,
                     };
 
-                    app.write_json(book).expect("Failed to add book");
+                    reader::write_json(app, book).expect("Failed to add book");
+
                     app.show_popup = !app.show_popup;
                     None
                 }
