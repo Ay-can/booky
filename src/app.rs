@@ -64,6 +64,7 @@ impl Default for BookState<'_> {
 pub struct App<'a> {
     pub running: bool,
     pub show_popup: bool,
+    pub help_popup: bool,
     pub state: TableState,
     pub book_edit_state: Option<BookState<'a>>,
     pub items: Vec<Book>,
@@ -74,6 +75,7 @@ impl Default for App<'_> {
         Self {
             running: true,
             show_popup: false,
+            help_popup: false,
             state: TableState::default(),
             book_edit_state: None,
             items: Vec::new(),

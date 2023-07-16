@@ -68,9 +68,9 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
 
     frame.render_stateful_widget(table, chunks[1], &mut app.state);
 
-    let footer = Block::default().title("Footer").borders(Borders::ALL);
-    let info_box = Paragraph::new("Add: 'a'").block(footer);
-    frame.render_widget(info_box, chunks[2]);
+    let footer = Block::default().title("Log").borders(Borders::ALL);
+    let temp_info = Paragraph::new("Press ? to access the help menu").block(footer);
+    frame.render_widget(temp_info, chunks[2]);
 
     // Popup
     if app.show_popup {
@@ -128,6 +128,9 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
             let cancel_btn = Paragraph::new(cancel_txt).style(cancel_style);
             frame.render_widget(create_btn, buttons[1]);
             frame.render_widget(cancel_btn, buttons[2]);
+
+            let tab_info = Paragraph::new("Press [tab] or [shift + tab] to move");
+            frame.render_widget(tab_info, buttons[0]);
 
             let b1 = Block::default().title("Title").borders(Borders::ALL);
             let b2 = Block::default().title("Author").borders(Borders::ALL);
@@ -202,6 +205,37 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
             }
             frame.render_widget(task.status.widget(), layout[4]);
         }
+    }
+    render_help_popup(app, frame);
+}
+
+fn render_help_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
+    if app.help_popup {
+        let block = Block::default().title("Help").borders(Borders::ALL);
+        let area = centered_rect(40, 40, frame.size());
+        let block_inner = block.inner(area);
+        frame.render_widget(Clear, area);
+        frame.render_widget(Paragraph::new("").block(block), area);
+
+        let layout = Layout::default()
+            .direction(Direction::Vertical)
+            .constraints(
+                [
+                    Constraint::Length(1),
+                    Constraint::Length(1),
+                    Constraint::Length(1),
+                ]
+                .as_ref(),
+            )
+            .split(block_inner);
+
+        let p1 = Paragraph::new("a -> Add a new book");
+        let p2 = Paragraph::new("d -> Delete current highlighted book(no confirmation)");
+        let p3 = Paragraph::new("hj/updown arrows -> to select a book");
+
+        frame.render_widget(p1, layout[0]);
+        frame.render_widget(p2, layout[1]);
+        frame.render_widget(p3, layout[2]);
     }
 }
 
