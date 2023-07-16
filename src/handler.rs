@@ -48,7 +48,11 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                     Some(task)
                 }
                 (KeyCode::Enter, BookEditFocus::ConfirmBtn) => {
-                    let id = app.items[app.items.len() - 1].id + 1;
+                    let total_books = app.items.len();
+                    let mut id = 0;
+                    if total_books > 0 {
+                        id = app.items[total_books - 1].id + 1;
+                    }
                     let title = task.title.into_lines().join("\n");
                     let author = task.author.into_lines().join("\n");
                     let genre = task.genre.into_lines().join("\n");
@@ -120,7 +124,7 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             // Remove book
             KeyCode::Char('d') => {
                 if app.items.len() != 0 {
-                    app.remove_json_at_index().expect("Failed to remove");
+                    reader::remove_json_at_index(app).expect("Failed to remove");
                 }
             }
             KeyCode::Char('a') => {

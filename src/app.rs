@@ -122,49 +122,4 @@ impl<'a> App<'a> {
         };
         self.state.select(Some(i));
     }
-
-    // Close your eyes, this is temp fix
-    pub fn read_json(&mut self) -> Result<Vec<Book>, Box<dyn error::Error>> {
-        if let Some(proj_dirs) = ProjectDirs::from("", "", "booky") {
-            let config_dir: &Path = proj_dirs.config_dir();
-            let new_path = config_dir.join("books.json");
-            let books: Vec<Book> = {
-                let config_contents = fs::read_to_string(&new_path).expect("Failed to read");
-                serde_json::from_str(&config_contents).unwrap()
-            };
-            self.items = books.clone();
-            Ok(books)
-        } else {
-            let books: Vec<Book> = vec![];
-            Ok(books)
-        }
-    }
-
-    pub fn create_json(&mut self) {
-        if let Some(proj_dirs) = ProjectDirs::from("", "", "booky") {
-            let config_dir: &Path = proj_dirs.config_dir();
-            if !config_dir.exists() {
-                fs::create_dir(config_dir);
-                fs::write(config_dir.join("books.json"), "[]");
-            }
-        }
-    }
-
-    pub fn remove_json_at_index(&mut self) -> Result<(), Box<dyn error::Error>> {
-        if let Some(proj_dirs) = ProjectDirs::from("", "", "booky") {
-            let config_dir: &Path = proj_dirs.config_dir();
-            let new_path = config_dir.join("books.json");
-            if let Some(selected) = self.state.selected() {
-                self.items.remove(selected);
-                fs::write(new_path, &serde_json::to_vec(&self.items)?)?;
-
-                if selected > 0 {
-                    self.state.select(Some(selected - 1))
-                } else {
-                    self.state.select(Some(0))
-                }
-            }
-        }
-        Ok(())
-    }
 }

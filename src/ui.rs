@@ -1,4 +1,5 @@
 use crate::app::{App, BookEditFocus};
+use crate::reader;
 use tui::{
     backend::Backend,
     layout::{Alignment, Constraint, Direction, Layout, Rect},
@@ -34,7 +35,7 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     let stats_block = Paragraph::new(books_count).block(menu_block);
     frame.render_widget(stats_block, chunks[0]);
 
-    let book_list = app.read_json().expect("Failed");
+    let book_list = reader::read_json(app).expect("Failed");
     let rows: Vec<Row> = book_list
         .iter()
         .map(|i| {

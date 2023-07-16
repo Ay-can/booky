@@ -1,6 +1,7 @@
 use booky::app::{App, AppResult};
 use booky::event::{Event, EventHandler};
 use booky::handler::handle_key_events;
+use booky::reader;
 use booky::tui::Tui;
 use std::io;
 use tui::backend::CrosstermBackend;
@@ -12,7 +13,7 @@ fn main() -> AppResult<()> {
 
     //Create booky/books.json in $HOME
     //Change this later.. it should only contain config files afterall..
-    app.create_json();
+    reader::create_json();
 
     // Initialize the terminal user interface.
     let backend = CrosstermBackend::new(io::stderr());
