@@ -11,7 +11,11 @@ pub fn change_focus(task: &mut BookState<'_>, forward: bool) -> Result<(), Box<d
     let cycle = if forward {
         (task.focus.int_value() + 1) % EDIT_WINDOW_FOCUS
     } else {
-        (task.focus.int_value() - 1) % EDIT_WINDOW_FOCUS
+        let mut current_value = (task.focus.int_value() - 1) % EDIT_WINDOW_FOCUS;
+        if current_value < 0 {
+            current_value = 6;
+        }
+        current_value
     };
     task.focus = BookEditFocus::from_int(cycle)?;
     Ok(())
@@ -140,6 +144,9 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 if app.items.len() != 0 {
                     app.next();
                 }
+            }
+            KeyCode::Char('?') => {
+                app.help_popup = !app.help_popup;
             }
             _ => {}
         }
