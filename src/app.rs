@@ -1,6 +1,4 @@
-use directories::ProjectDirs;
-use serde::{Deserialize, Serialize};
-
+use crate::database::models::Book;
 use int_enum::IntEnum;
 use std::error;
 use std::fs;
@@ -11,16 +9,6 @@ use tui_textarea::TextArea;
 
 /// Application result type.
 pub type AppResult<T> = std::result::Result<T, Box<dyn error::Error>>;
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct Book {
-    pub id: usize,
-    pub title: String,
-    pub author: String,
-    pub genre: String,
-    pub rating: f64,
-    pub status: String,
-}
 
 pub const EDIT_WINDOW_FOCUS: i8 = 7;
 

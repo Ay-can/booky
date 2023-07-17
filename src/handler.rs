@@ -1,5 +1,6 @@
-use crate::app::{App, AppResult, Book, BookEditFocus, BookState, EDIT_WINDOW_FOCUS};
-use crate::reader;
+use crate::app::{App, AppResult, BookEditFocus, BookState, EDIT_WINDOW_FOCUS};
+use crate::database;
+use crate::database::models::NewBook;
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use int_enum::IntEnum;
 use std::error;
@@ -51,34 +52,34 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                     change_focus(&mut task, false)?;
                     Some(task)
                 }
+
                 (KeyCode::Enter, BookEditFocus::ConfirmBtn) => {
-                    let total_books = app.items.len();
-                    let mut id = 0;
-                    if total_books > 0 {
-                        id = app.items[total_books - 1].id + 1;
-                    }
                     let title = task.title.into_lines().join("\n");
                     let author = task.author.into_lines().join("\n");
                     let genre = task.genre.into_lines().join("\n");
-                    let check_rating = validate(&mut task.rating);
                     let status = task.status.into_lines().join("\n");
-                    let mut rating = 0.0;
+                    //rewrite this mess
+                    let validate_rating = validate(&mut task.rating);
+                    let mut rating = 0;
 
-                    if check_rating {
-                        rating = task.rating.lines()[0].parse::<f64>().unwrap();
+                    if validate_rating {
+                        rating = task.rating.lines()[0].parse::<i32>().unwrap();
+                        if rating > 10 {
+                            rating = 10;
+                        }
+                    } else {
+                        rating = 0;
                     }
 
-                    let book = Book {
-                        id: id,
-                        title: title,
-                        author: author,
-                        genre: genre,
-                        rating: rating,
-                        status: status,
+                    let new_book = NewBook {
+                        title,
+                        author,
+                        genre,
+                        rating,
+                        status,
                     };
 
-                    reader::write_json(app, book).expect("Failed to add book");
-
+                    database::create_book(new_book);
                     app.show_popup = !app.show_popup;
                     None
                 }
@@ -128,7 +129,7 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             // Remove book
             KeyCode::Char('d') => {
                 if app.items.len() != 0 {
-                    reader::remove_json_at_index(app).expect("Failed to remove");
+                    database::delete_book(app);
                 }
             }
             KeyCode::Char('a') => {
