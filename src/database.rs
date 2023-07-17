@@ -4,6 +4,7 @@ pub mod schema;
 use crate::app::App;
 use crate::database::models::*;
 use crate::database::schema::books::dsl::books;
+use crate::database::schema::books::*;
 use diesel::prelude::*;
 use dotenvy::dotenv;
 use std::env;
@@ -18,7 +19,6 @@ pub fn establish_connection() -> SqliteConnection {
 
 pub fn create_book(new_book: NewBook) -> Book {
     use crate::database::schema::books;
-
     let connection = &mut establish_connection();
 
     diesel::insert_into(books::table)
@@ -30,8 +30,6 @@ pub fn create_book(new_book: NewBook) -> Book {
 
 // Do this without app parameter later
 pub fn get_books(app: &mut App) -> Vec<Book> {
-    use crate::database::schema::books;
-
     let connection = &mut establish_connection();
 
     let results = books
@@ -40,4 +38,13 @@ pub fn get_books(app: &mut App) -> Vec<Book> {
         .expect("Error loading books");
     app.items = results.clone();
     results
+}
+
+pub fn delete_book(app: &mut App) {
+    let connection = &mut establish_connection();
+    if let Some(selected) = app.state.selected() {
+        let current_id = app.items.get(selected).unwrap().id;
+        app.items.remove(selected);
+        diesel::delete(books.filter(id.eq(current_id))).execute(connection);
+    }
 }

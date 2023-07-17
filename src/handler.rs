@@ -151,7 +151,7 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             // Remove book
             KeyCode::Char('d') => {
                 if app.items.len() != 0 {
-                    // reader::remove_json_at_index(app).expect("Failed to remove");
+                    database::delete_book(app);
                 }
             }
             KeyCode::Char('a') => {
