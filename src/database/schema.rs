@@ -6,7 +6,7 @@ diesel::table! {
         title -> Text,
         author -> Text,
         genre -> Text,
-        rating -> Integer,
+        rating -> Float,
         status -> Text,
     }
 }
