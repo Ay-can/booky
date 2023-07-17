@@ -2,7 +2,6 @@ use booky::app::{App, AppResult};
 use booky::database;
 use booky::event::{Event, EventHandler};
 use booky::handler::handle_key_events;
-use booky::reader;
 use booky::tui::Tui;
 use std::io;
 use tui::backend::CrosstermBackend;

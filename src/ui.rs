@@ -1,6 +1,5 @@
 use crate::app::{App, BookEditFocus};
 use crate::database;
-use crate::reader;
 use tui::{
     backend::Backend,
     layout::{Alignment, Constraint, Direction, Layout, Rect},
