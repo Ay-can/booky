@@ -32,27 +32,14 @@ pub fn get_books() {
     }
 }
 
-pub fn create_book(
-    conn: &mut SqliteConnection,
-    title: String,
-    author: String,
-    genre: String,
-    rating: i32,
-    status: String,
-) -> Book {
+pub fn create_book(new_book: NewBook) -> Book {
     use crate::database::schema::books;
 
-    let new_book = NewBook {
-        title,
-        author,
-        genre,
-        rating,
-        status,
-    };
+    let connection = &mut establish_connection();
 
     diesel::insert_into(books::table)
         .values(&new_book)
         .returning(Book::as_returning())
-        .get_result(conn)
+        .get_result(connection)
         .expect("Error saving new book")
 }

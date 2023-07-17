@@ -1,4 +1,6 @@
 use crate::app::{App, AppResult, Book, BookEditFocus, BookState, EDIT_WINDOW_FOCUS};
+use crate::database;
+use crate::database::models::NewBook;
 use crate::reader;
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use int_enum::IntEnum;
@@ -51,6 +53,7 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                     change_focus(&mut task, false)?;
                     Some(task)
                 }
+                /*
                 (KeyCode::Enter, BookEditFocus::ConfirmBtn) => {
                     let total_books = app.items.len();
                     let mut id = 0;
@@ -79,6 +82,26 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
 
                     reader::write_json(app, book).expect("Failed to add book");
 
+                    app.show_popup = !app.show_popup;
+                    None
+                }
+                */
+                (KeyCode::Enter, BookEditFocus::ConfirmBtn) => {
+                    let title = task.title.into_lines().join("\n");
+                    let author = task.author.into_lines().join("\n");
+                    let genre = task.genre.into_lines().join("\n");
+                    let rating = 0;
+                    let status = task.status.into_lines().join("\n");
+
+                    let new_book = NewBook {
+                        title,
+                        author,
+                        genre,
+                        rating,
+                        status,
+                    };
+
+                    database::create_book(new_book);
                     app.show_popup = !app.show_popup;
                     None
                 }
