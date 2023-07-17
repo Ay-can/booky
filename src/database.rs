@@ -46,5 +46,11 @@ pub fn delete_book(app: &mut App) {
         let current_id = app.items.get(selected).unwrap().id;
         app.items.remove(selected);
         diesel::delete(books.filter(id.eq(current_id))).execute(connection);
+
+        if selected > 1 {
+            app.state.select(Some(selected - 1))
+        } else {
+            app.state.select(Some(0))
+        }
     }
 }
