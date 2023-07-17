@@ -11,13 +11,6 @@ fn main() -> AppResult<()> {
     // Create an application.
     let mut app = App::new();
 
-    //Create booky/books.json in $HOME
-    //Change this later.. it should only contain config files afterall..
-    //reader::create_json();
-
-    // test
-    //database::get_books();
-
     // Initialize the terminal user interface.
     let backend = CrosstermBackend::new(io::stderr());
     let terminal = Terminal::new(backend)?;
