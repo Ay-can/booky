@@ -15,3 +15,6 @@ pub mod handler;
 
 /// Json reader and maybe db later?
 pub mod reader;
+
+/// Database
+pub mod database;
