@@ -1,3 +1,4 @@
+/*
 use crate::app::{App, Book};
 use directories::ProjectDirs;
 use serde::{Deserialize, Serialize};
@@ -61,3 +62,4 @@ pub fn remove_json_at_index(app: &mut App) -> Result<(), Box<dyn error::Error>> 
     }
     Ok(())
 }
+*/

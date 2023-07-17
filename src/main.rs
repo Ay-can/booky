@@ -14,7 +14,7 @@ fn main() -> AppResult<()> {
 
     //Create booky/books.json in $HOME
     //Change this later.. it should only contain config files afterall..
-    reader::create_json();
+    //reader::create_json();
 
     // test
     //database::get_books();

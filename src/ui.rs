@@ -37,7 +37,7 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     frame.render_widget(stats_block, chunks[0]);
 
     //let book_list = reader::read_json(app).expect("Failed");
-    let book_list = database::get_books();
+    let book_list = database::get_books(app);
     let rows: Vec<Row> = book_list
         .iter()
         .map(|i| {

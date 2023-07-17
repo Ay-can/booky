@@ -1,6 +1,7 @@
 pub mod models;
 pub mod schema;
 
+use crate::app::App;
 use crate::database::models::*;
 use crate::database::schema::books::dsl::books;
 use diesel::prelude::*;
@@ -27,7 +28,8 @@ pub fn create_book(new_book: NewBook) -> Book {
         .expect("Error saving new book")
 }
 
-pub fn get_books() -> Vec<Book> {
+// Do this without app parameter later
+pub fn get_books(app: &mut App) -> Vec<Book> {
     use crate::database::schema::books;
 
     let connection = &mut establish_connection();
@@ -36,5 +38,6 @@ pub fn get_books() -> Vec<Book> {
         .select(Book::as_select())
         .load(connection)
         .expect("Error loading books");
+    app.items = results.clone();
     results
 }

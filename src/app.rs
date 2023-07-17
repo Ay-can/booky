@@ -1,3 +1,4 @@
+use crate::database::models::Book;
 use directories::ProjectDirs;
 use serde::{Deserialize, Serialize};
 
@@ -12,6 +13,7 @@ use tui_textarea::TextArea;
 /// Application result type.
 pub type AppResult<T> = std::result::Result<T, Box<dyn error::Error>>;
 
+/*
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Book {
     pub id: usize,
@@ -21,6 +23,7 @@ pub struct Book {
     pub rating: f64,
     pub status: String,
 }
+*/
 
 pub const EDIT_WINDOW_FOCUS: i8 = 7;
 

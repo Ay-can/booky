@@ -1,4 +1,4 @@
-use crate::app::{App, AppResult, Book, BookEditFocus, BookState, EDIT_WINDOW_FOCUS};
+use crate::app::{App, AppResult, BookEditFocus, BookState, EDIT_WINDOW_FOCUS};
 use crate::database;
 use crate::database::models::NewBook;
 use crate::reader;
@@ -151,7 +151,7 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             // Remove book
             KeyCode::Char('d') => {
                 if app.items.len() != 0 {
-                    reader::remove_json_at_index(app).expect("Failed to remove");
+                    // reader::remove_json_at_index(app).expect("Failed to remove");
                 }
             }
             KeyCode::Char('a') => {
