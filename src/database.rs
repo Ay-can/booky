@@ -15,23 +15,6 @@ pub fn establish_connection() -> SqliteConnection {
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
 }
 
-pub fn get_books() {
-    use crate::database::schema::books;
-
-    let connection = &mut establish_connection();
-    let results = books
-        .limit(5)
-        .select(Book::as_select())
-        .load(connection)
-        .expect("Error loading books");
-
-    println!("Displaying {} books", results.len());
-
-    for book in results {
-        println!("{}", book.title);
-    }
-}
-
 pub fn create_book(new_book: NewBook) -> Book {
     use crate::database::schema::books;
 
@@ -42,4 +25,16 @@ pub fn create_book(new_book: NewBook) -> Book {
         .returning(Book::as_returning())
         .get_result(connection)
         .expect("Error saving new book")
+}
+
+pub fn get_books() -> Vec<Book> {
+    use crate::database::schema::books;
+
+    let connection = &mut establish_connection();
+
+    let results = books
+        .select(Book::as_select())
+        .load(connection)
+        .expect("Error loading books");
+    results
 }
