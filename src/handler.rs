@@ -57,8 +57,19 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                     let title = task.title.into_lines().join("\n");
                     let author = task.author.into_lines().join("\n");
                     let genre = task.genre.into_lines().join("\n");
-                    let rating = 0;
                     let status = task.status.into_lines().join("\n");
+                    //rewrite this mess
+                    let validate_rating = validate(&mut task.rating);
+                    let mut rating = 0;
+
+                    if validate_rating {
+                        rating = task.rating.lines()[0].parse::<i32>().unwrap();
+                        if rating > 10 {
+                            rating = 10;
+                        }
+                    } else {
+                        rating = 0;
+                    }
 
                     let new_book = NewBook {
                         title,
