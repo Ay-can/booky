@@ -1,4 +1,5 @@
 use booky::app::{App, AppResult};
+use booky::database;
 use booky::event::{Event, EventHandler};
 use booky::handler::handle_key_events;
 use booky::reader;
@@ -14,6 +15,20 @@ fn main() -> AppResult<()> {
     //Create booky/books.json in $HOME
     //Change this later.. it should only contain config files afterall..
     reader::create_json();
+
+    // test
+    //database::get_books();
+
+    let connection = &mut database::establish_connection();
+    let book = database::create_book(
+        connection,
+        "Can't Hurt Me".to_string(),
+        "David Goggins".to_string(),
+        "Self-help".to_string(),
+        10,
+        "Finished".to_string(),
+    );
+    dbg!("We saved {}", book.id);
 
     // Initialize the terminal user interface.
     let backend = CrosstermBackend::new(io::stderr());

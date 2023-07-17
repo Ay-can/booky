@@ -4,6 +4,6 @@ CREATE TABLE books (
 	title VARCHAR NOT NULL,
 	author VARCHAR NOT NULL,
 	genre VARCHAR NOT NULL,
-	rating REAL NOT NULL,
+	rating INTEGER NOT NULL,
 	status VARCHAR NOT NULL
 )
