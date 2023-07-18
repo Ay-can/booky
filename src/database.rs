@@ -12,18 +12,11 @@ use dirs_2::document_dir;
 use dotenvy::dotenv;
 use std::env;
 use std::error::Error;
+use std::fs;
 
 const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
-type DB = diesel::sqlite::Sqlite;
 
-pub fn establish_connection() -> SqliteConnection {
-    dotenv().ok();
-
-    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    SqliteConnection::establish(&database_url)
-        .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
-}
-
+// Create migrations at runtime instead if using diesel cli
 fn run_migrations(
     connection: &mut impl MigrationHarness<Sqlite>,
 ) -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
@@ -31,17 +24,32 @@ fn run_migrations(
     Ok(())
 }
 
-pub fn establish_connection_2() -> SqliteConnection {
-    let database_url = "./books.db";
-    let mut connection =
-        SqliteConnection::establish(database_url).unwrap_or_else(|_| panic!("Error connecting to"));
+pub fn establish_connection() -> SqliteConnection {
+    let booky_dir = document_dir()
+        .expect("Failed to create booky directory in /Documents")
+        .join("booky");
+
+    if !booky_dir.exists() {
+        fs::create_dir(booky_dir);
+    }
+
+    let document_path = document_dir()
+        .expect("Failed to find /Documents")
+        .join("booky")
+        .join("books.db");
+    let document_path = document_path.display().to_string();
+
+    // Sqlite will automatically create books.db if it does't exist
+    let mut connection = SqliteConnection::establish(&document_path)
+        .unwrap_or_else(|_| panic!("Error connecting to"));
+
     run_migrations(&mut connection);
     connection
 }
 
 pub fn create_book(new_book: NewBook) -> Book {
     use crate::database::schema::books;
-    let connection = &mut establish_connection_2();
+    let connection = &mut establish_connection();
 
     diesel::insert_into(books::table)
         .values(&new_book)
@@ -52,7 +60,7 @@ pub fn create_book(new_book: NewBook) -> Book {
 
 // Do this without app parameter later
 pub fn get_books(app: &mut App) -> Vec<Book> {
-    let connection = &mut establish_connection_2();
+    let connection = &mut establish_connection();
 
     let results = books
         .select(Book::as_select())
@@ -63,7 +71,7 @@ pub fn get_books(app: &mut App) -> Vec<Book> {
 }
 
 pub fn update_book(book_id: i32, update_book: NewBook) {
-    let connection = &mut establish_connection_2();
+    let connection = &mut establish_connection();
 
     diesel::update(books.find(book_id))
         .set(update_book)
@@ -72,7 +80,7 @@ pub fn update_book(book_id: i32, update_book: NewBook) {
 }
 
 pub fn delete_book(app: &mut App) {
-    let connection = &mut establish_connection_2();
+    let connection = &mut establish_connection();
     if let Some(selected) = app.state.selected() {
         let current_id = app.items.get(selected).unwrap().id;
         app.items.remove(selected);
