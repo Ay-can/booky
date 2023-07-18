@@ -225,6 +225,7 @@ fn render_help_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
                     Constraint::Length(1),
                     Constraint::Length(1),
                     Constraint::Length(1),
+                    Constraint::Length(1),
                 ]
                 .as_ref(),
             )
@@ -233,10 +234,12 @@ fn render_help_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
         let p1 = Paragraph::new("a -> Add a new book");
         let p2 = Paragraph::new("d -> Delete current highlighted book(no confirmation)");
         let p3 = Paragraph::new("hj/updown arrows -> to select a book");
+        let p4 = Paragraph::new("u -> Update current selected book");
 
         frame.render_widget(p1, layout[0]);
         frame.render_widget(p2, layout[1]);
         frame.render_widget(p3, layout[2]);
+        frame.render_widget(p4, layout[3]);
     }
 }
 
