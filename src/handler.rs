@@ -78,8 +78,14 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                         rating,
                         status,
                     };
-
-                    database::create_book(new_book);
+                    if !task.is_edit {
+                        database::create_book(new_book);
+                    } else {
+                        if let Some(selected) = app.state.selected() {
+                            let current_id = app.items.get(selected).unwrap().id;
+                            database::update_book(current_id, new_book);
+                        }
+                    }
                     app.show_popup = !app.show_popup;
                     None
                 }
@@ -131,6 +137,23 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 if app.items.len() != 0 {
                     database::delete_book(app);
                 }
+            }
+            KeyCode::Char('u') => {
+                // Do this in app later?
+                if let Some(index) = app.state.selected() {
+                    let current_book = app.items.get(index).unwrap();
+                    let new_book_state = BookState {
+                        title: TextArea::from(current_book.title.lines()),
+                        author: TextArea::from(current_book.author.lines()),
+                        genre: TextArea::from(current_book.genre.lines()),
+                        rating: TextArea::from(current_book.rating.to_string().lines()),
+                        status: TextArea::from(current_book.status.lines()),
+                        focus: BookEditFocus::Title,
+                        is_edit: true,
+                    };
+                    app.book_edit_state = Some(new_book_state);
+                }
+                app.show_popup = !app.show_popup;
             }
             KeyCode::Char('a') => {
                 app.book_edit_state = Some(BookState::default());

@@ -40,12 +40,24 @@ pub fn get_books(app: &mut App) -> Vec<Book> {
     results
 }
 
+pub fn update_book(book_id: i32, update_book: NewBook) {
+    use crate::database::schema::books;
+    let connection = &mut establish_connection();
+
+    diesel::update(books.find(book_id))
+        .set(update_book)
+        .execute(connection)
+        .expect("Error updating book");
+}
+
 pub fn delete_book(app: &mut App) {
     let connection = &mut establish_connection();
     if let Some(selected) = app.state.selected() {
         let current_id = app.items.get(selected).unwrap().id;
         app.items.remove(selected);
-        diesel::delete(books.filter(id.eq(current_id))).execute(connection);
+        diesel::delete(books.filter(id.eq(current_id)))
+            .execute(connection)
+            .expect("Failed to delete book");
 
         if selected > 1 {
             app.state.select(Some(selected - 1))

@@ -1,7 +1,7 @@
 use super::schema::books;
 use diesel::prelude::*;
 
-#[derive(Queryable, Selectable, Clone)]
+#[derive(Queryable, Selectable, Clone, AsChangeset)]
 #[diesel(table_name = crate::database::schema::books)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct Book {
@@ -13,7 +13,7 @@ pub struct Book {
     pub status: String,
 }
 
-#[derive(Insertable)]
+#[derive(Insertable, AsChangeset)]
 #[diesel(table_name = books)]
 pub struct NewBook {
     pub title: String,
