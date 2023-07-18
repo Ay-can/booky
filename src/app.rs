@@ -1,8 +1,6 @@
 use crate::database::models::Book;
 use int_enum::IntEnum;
 use std::error;
-use std::fs;
-use std::path::Path;
 
 use tui::widgets::TableState;
 use tui_textarea::TextArea;

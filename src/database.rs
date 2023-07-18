@@ -41,7 +41,6 @@ pub fn get_books(app: &mut App) -> Vec<Book> {
 }
 
 pub fn update_book(book_id: i32, update_book: NewBook) {
-    use crate::database::schema::books;
     let connection = &mut establish_connection();
 
     diesel::update(books.find(book_id))
