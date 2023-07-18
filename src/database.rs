@@ -9,8 +9,8 @@ use diesel::prelude::*;
 use diesel::sqlite::Sqlite;
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use dirs_2::document_dir;
-use dotenvy::dotenv;
-use std::env;
+
+
 use std::error::Error;
 use std::fs;
 
