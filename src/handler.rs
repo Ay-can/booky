@@ -1,4 +1,7 @@
-use crate::app::{App, AppResult, BookEditFocus, BookState, EDIT_WINDOW_FOCUS};
+use crate::app::{
+    App, AppResult, BookEditFocus, BookState, SearchFieldFocus, SearchState, EDIT_WINDOW_FOCUS,
+    SEARCH_WINDOW_FOCUS,
+};
 use crate::database;
 use crate::database::models::NewBook;
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
@@ -19,6 +22,20 @@ pub fn change_focus(task: &mut BookState<'_>, forward: bool) -> Result<(), Box<d
         current_value
     };
     task.focus = BookEditFocus::from_int(cycle)?;
+    Ok(())
+}
+
+//Temp
+pub fn change_focus_2(
+    task: &mut SearchState<'_>,
+    forward: bool,
+) -> Result<(), Box<dyn error::Error>> {
+    let cycle = if forward {
+        (task.focus.int_value() + 1) % SEARCH_WINDOW_FOCUS
+    } else {
+        (task.focus.int_value() - 1) % SEARCH_WINDOW_FOCUS
+    };
+    task.focus = SearchFieldFocus::from_int(cycle)?;
     Ok(())
 }
 
@@ -120,6 +137,36 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             None
         };
         app.book_edit_state = updated_task;
+    } else if app.search_field_state.is_some() {
+        let updated_task = if let Some(mut task) = app.search_field_state.take() {
+            match (key_event.code, task.focus) {
+                (KeyCode::Tab, _) => {
+                    change_focus_2(&mut task, true)?;
+                    Some(task)
+                }
+                (KeyCode::BackTab, _) => {
+                    change_focus_2(&mut task, false)?;
+                    Some(task)
+                }
+                (KeyCode::Enter, SearchFieldFocus::Input) => Some(task),
+                (_, SearchFieldFocus::Input) => {
+                    task.input.input(key_event);
+                    Some(task)
+                }
+                (KeyCode::Enter, SearchFieldFocus::ConfirmBtn) => {
+                    app.search_popup = !app.search_popup;
+                    None
+                }
+                (KeyCode::Enter, SearchFieldFocus::CancelBtn) => {
+                    app.search_popup = !app.search_popup;
+                    None
+                }
+                _ => Some(task),
+            }
+        } else {
+            None
+        };
+        app.search_field_state = updated_task;
     } else {
         match key_event.code {
             // Exit application on `ESC` or `q`
@@ -168,6 +215,10 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 if app.items.len() != 0 {
                     app.next();
                 }
+            }
+            KeyCode::Char('/') => {
+                app.search_field_state = Some(SearchState::default());
+                app.search_popup = !app.search_popup;
             }
             KeyCode::Char('?') => {
                 app.help_popup = !app.help_popup;

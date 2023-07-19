@@ -1,4 +1,4 @@
-use crate::app::{App, BookEditFocus};
+use crate::app::{App, BookEditFocus, SearchFieldFocus};
 use crate::database;
 use tui::{
     backend::Backend,
@@ -208,6 +208,84 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
         }
     }
     render_help_popup(app, frame);
+    render_search_popup(app, frame);
+}
+
+fn render_search_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
+    if app.search_popup {
+        let block = Block::default().title("Search Book").borders(Borders::ALL);
+        let area = centered_rect(40, 40, frame.size());
+        let block_inner = block.inner(area);
+        frame.render_widget(Clear, area);
+        frame.render_widget(Paragraph::new("").block(block), area);
+        if let Some(task) = &mut app.search_field_state {
+            let layout = Layout::default()
+                .direction(Direction::Vertical)
+                .constraints(
+                    [
+                        Constraint::Length(3),
+                        Constraint::Length(3),
+                        Constraint::Length(3),
+                        Constraint::Length(3),
+                        Constraint::Length(3),
+                        Constraint::Length(1),
+                        Constraint::Length(2),
+                    ]
+                    .as_ref(),
+                )
+                .split(block_inner);
+
+            let buttons = Layout::default()
+                .direction(Direction::Horizontal)
+                .constraints(
+                    [
+                        Constraint::Percentage(80),
+                        Constraint::Min(10),
+                        Constraint::Min(10),
+                    ]
+                    .as_ref(),
+                )
+                .split(layout[5]);
+
+            let (create_style, cancel_style, create_txt, cancel_txt) = match task.focus {
+                SearchFieldFocus::ConfirmBtn => (
+                    Style::default().add_modifier(Modifier::BOLD),
+                    Style::default(),
+                    "[Confirm]",
+                    " Cancel ",
+                ),
+                SearchFieldFocus::CancelBtn => (
+                    Style::default(),
+                    Style::default().add_modifier(Modifier::BOLD),
+                    " Confirm ",
+                    "[Cancel]",
+                ),
+                _ => (Style::default(), Style::default(), " Confirm ", " Cancel "),
+            };
+
+            let create_btn = Paragraph::new(create_txt).style(create_style);
+            let cancel_btn = Paragraph::new(cancel_txt).style(cancel_style);
+            frame.render_widget(create_btn, buttons[1]);
+            frame.render_widget(cancel_btn, buttons[2]);
+
+            let b1 = Block::default().title("Search:").borders(Borders::ALL);
+
+            task.input.set_cursor_line_style(Style::default());
+
+            task.input.set_block(b1);
+
+            if let SearchFieldFocus::Input = task.focus {
+                task.input
+                    .set_style(Style::default().add_modifier(Modifier::BOLD));
+                task.input
+                    .set_cursor_style(Style::default().add_modifier(Modifier::REVERSED))
+            } else {
+                task.input.set_style(Style::default());
+                task.input.set_cursor_style(Style::default());
+            }
+            frame.render_widget(task.input.widget(), layout[0]);
+        }
+    }
 }
 
 fn render_help_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {

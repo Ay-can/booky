@@ -9,6 +9,29 @@ use tui_textarea::TextArea;
 pub type AppResult<T> = std::result::Result<T, Box<dyn error::Error>>;
 
 pub const EDIT_WINDOW_FOCUS: i8 = 7;
+pub const SEARCH_WINDOW_FOCUS: i8 = 3;
+
+#[repr(i8)]
+#[derive(Debug, IntEnum, Clone, Copy)]
+pub enum SearchFieldFocus {
+    Input = 0,
+    ConfirmBtn = 1,
+    CancelBtn = 2,
+}
+
+pub struct SearchState<'a> {
+    pub input: TextArea<'a>,
+    pub focus: SearchFieldFocus,
+}
+
+impl Default for SearchState<'_> {
+    fn default() -> Self {
+        SearchState {
+            input: TextArea::default(),
+            focus: SearchFieldFocus::Input,
+        }
+    }
+}
 
 #[repr(i8)]
 #[derive(Debug, IntEnum, Clone, Copy)]
@@ -51,8 +74,10 @@ pub struct App<'a> {
     pub running: bool,
     pub show_popup: bool,
     pub help_popup: bool,
+    pub search_popup: bool,
     pub state: TableState,
     pub book_edit_state: Option<BookState<'a>>,
+    pub search_field_state: Option<SearchState<'a>>,
     pub items: Vec<Book>,
 }
 
@@ -62,8 +87,10 @@ impl Default for App<'_> {
             running: true,
             show_popup: false,
             help_popup: false,
+            search_popup: false,
             state: TableState::default(),
             book_edit_state: None,
+            search_field_state: None,
             items: Vec::new(),
         }
     }
