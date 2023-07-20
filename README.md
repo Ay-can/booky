@@ -1,16 +1,16 @@
 # booky
+booky is a minimalistic TUI tool for managing your growing book collection.
 
-## About
-booky is a minimalistic TUI tool for managing your growing book collection. It is writtin in Rust and uses [Diesel](https://diesel.rs/) as it's ORM to query an sqlite database. The Tui is created using the awesome Rust crate called [ratatui] https://crates.io/crates/ratatui
+It is writtin in Rust and uses [diesel](https://diesel.rs/) as it's orm together with sqlite. The tui is created using the awesome Rust crate called [ratatui](https://crates.io/crates/ratatui)
 
 ## Motivation
-After learning Rust for 10 days I wanted to smart a small project that I could personally use. I live inside my terminal like the cool kids, so I wanted to create a small tool that could make it easy for me to manage my growing book collection.
+After learning Rust for 10 days I wanted to start a small project that I could personally use. I live inside my terminal like the cool kids, so I wanted to create a small tool that could make it easy for me to manage my growing book collection.
 
 Reading is fun, but I quickly forget which books I've read in a month/year. Or how many books of an author I have personally read. I want a simple tool that shows me my current list of books and allows me to see statistics like:
 
-"Books read in the month of April"
-"Books read in 2023"
-"You've read 20 fictional books in 2020", etc.
+- **Books read in the month of April**
+- **Books read in 2023**
+- **You've read 20 fictional books in 2020**, etc.
 
 As of now, booky can only perform CRUD operations and allows for a basic search on book titles. I plan to add more features as can be seen in the TODO section.
 
@@ -32,7 +32,7 @@ This project suffers from noobiness, I'm learning Rust and a bunch of things at 
 - Make sure you have Rust installed.
 - Clone this repo and cd into it.
 - Build the project using `cargo b --release`
-- The binary can be found in `target/release/booky'
+- The binary can be found in `target/release/booky`
 
 If all goes well, booky will create a directory in `/documents/booky` containing a empty `books.db`
 
@@ -57,7 +57,8 @@ If all goes well, booky will create a directory in `/documents/booky` containing
 
 ## Acknowledgements/Inspiration
 I wouldn't be able to create booky without an awesome project called [kanban-tui](https://github.com/JosephFerano/kanban-tui)
-I took a lot of inspiration from Joseph Ferano's kanban-tui project, it help me understand how I could create "forms" that I could use for adding/searching in booky. Check his cool project out!
+
+I took a lot of inspiration from Joseph Ferano's kanban-tui project, it helpt me understand how I could create "forms" that I could use for adding/searching in booky. Check his cool project out!
 
 ## License
 booky is licensed with the MIT license. Check the LICENSE file for more info.
