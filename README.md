@@ -1,6 +1,4 @@
 # booky
-
-## About
 booky is a minimalistic TUI tool for managing your growing book collection. It is writtin in Rust and uses [Diesel](https://diesel.rs/) as it's ORM to query an sqlite database. The Tui is created using the awesome Rust crate called [ratatui](https://crates.io/crates/ratatui)
 
 ## Motivation
