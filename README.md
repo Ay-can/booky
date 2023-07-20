@@ -57,7 +57,9 @@ If all goes well, booky will create a directory in `/documents/booky` containing
 - Add ability to export your books in json format, that way you can use them on your website I guess?
 
 ## Contributions
-I'm a rust noob, contributions are always welcome. Feel free to create an issue and to @ me. If there is something that I'm doing very wrong (likely the case), don't hold back and just tell me.
+I'm a rust noob, contributions are always welcome. Feel free to create an issue and to @ me. 
+
+If there is something that I'm doing very wrong (likely the case), don't hold back and just tell me.
 The goal of this project is to learn, but I also want to make it a tool that other people could use.
 
 ## Acknowledgements/Inspiration
