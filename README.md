@@ -56,10 +56,14 @@ If all goes well, booky will create a directory in `/documents/booky` containing
 - Add a logger to booky that shows the user if changes were made to the db like an CRUD operation
 - Add ability to export your books in json format, that way you can use them on your website I guess?
 
+## Contributions
+I'm a rust noob, contributions are always welcome. Feel free to create an issue and to @ me. If there is something that I'm doing very wrong (likely the case), don't hold back and just tell me.
+The goal of this project is to learn, but I also want to make it a tool that other people could use.
+
 ## Acknowledgements/Inspiration
 I wouldn't be able to create booky without an awesome project called [kanban-tui](https://github.com/JosephFerano/kanban-tui)
 
-I took a lot of inspiration from Joseph Ferano's kanban-tui project, it helpt me understand how I could create "forms" that I could use for adding/searching in booky. Check his cool project out!
+I took a lot of inspiration from Joseph Ferano's kanban-tui project, it helped me understand how I could create "forms" that I could use for adding/searching in booky. Check his cool project out!
 
 ## License
 booky is licensed with the MIT license. Check the LICENSE file for more info.
