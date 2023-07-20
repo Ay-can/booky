@@ -286,7 +286,7 @@ fn render_search_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
 fn render_help_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     if app.help_popup {
         let block = Block::default().title("Help").borders(Borders::ALL);
-        let area = centered_rect(40, 40, frame.size());
+        let area = centered_rect(60, 40, frame.size());
         let block_inner = block.inner(area);
         frame.render_widget(Clear, area);
         frame.render_widget(Paragraph::new("").block(block), area);
@@ -308,7 +308,7 @@ fn render_help_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
             .split(block_inner);
 
         let p1 = Paragraph::new("i -> Add a new book");
-        let p2 = Paragraph::new("d -> Delete current highlighted book(no confirmation)");
+        let p2 = Paragraph::new("d -> Delete current highlighted book (no confirmation)");
         let p3 = Paragraph::new("jk/updown arrows -> to select a book");
         let p4 = Paragraph::new("u -> Update current selected book");
         let p5 = Paragraph::new("/ -> Search for a book");
