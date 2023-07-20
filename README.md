@@ -6,9 +6,9 @@ After learning Rust for 10 days I wanted to smart a small project that I could p
 
 Reading is fun, but I quickly forget which books I've read in a month/year. Or how many books of an author I have personally read. I want a simple tool that shows me my current list of books and allows me to see statistics like:
 
-"Books read in the month of April"
-"Books read in 2023"
-"You've read 20 fictional books in 2020", etc.
+- **Books read in the month of April**
+- **Books read in 2023**
+- **You've read 20 fictional books in 2020**, etc.
 
 As of now, booky can only perform CRUD operations and allows for a basic search on book titles. I plan to add more features as can be seen in the TODO section.
 
