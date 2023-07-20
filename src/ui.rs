@@ -78,7 +78,7 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     // Popup
     if app.show_popup {
         let block = Block::default().title("Add New Book").borders(Borders::ALL);
-        let area = centered_rect(40, 40, frame.size());
+        let area = centered_rect(45, 60, frame.size());
         let block_inner = block.inner(area);
         frame.render_widget(Clear, area);
         frame.render_widget(Paragraph::new("").block(block), area);
@@ -92,8 +92,8 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
                         Constraint::Length(3),
                         Constraint::Length(3),
                         Constraint::Length(3),
-                        Constraint::Length(1),
-                        Constraint::Length(2),
+                        Constraint::Length(5),
+                        Constraint::Length(10),
                     ]
                     .as_ref(),
                 )
@@ -101,15 +101,8 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
 
             let buttons = Layout::default()
                 .direction(Direction::Horizontal)
-                .constraints(
-                    [
-                        Constraint::Percentage(80),
-                        Constraint::Min(10),
-                        Constraint::Min(10),
-                    ]
-                    .as_ref(),
-                )
-                .split(layout[5]);
+                .constraints([Constraint::Percentage(50), Constraint::Percentage(50)].as_ref())
+                .split(layout[6]);
 
             let (create_style, cancel_style, create_txt, cancel_txt) = match task.focus {
                 BookEditFocus::ConfirmBtn => (
@@ -129,11 +122,11 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
 
             let create_btn = Paragraph::new(create_txt).style(create_style);
             let cancel_btn = Paragraph::new(cancel_txt).style(cancel_style);
-            frame.render_widget(create_btn, buttons[1]);
-            frame.render_widget(cancel_btn, buttons[2]);
+            frame.render_widget(create_btn, buttons[0]);
+            frame.render_widget(cancel_btn, buttons[1]);
 
-            let tab_info = Paragraph::new("Press [tab] or [shift + tab] to move");
-            frame.render_widget(tab_info, buttons[0]);
+            let tab_info = Paragraph::new("[tab] / [shift + tab] to cycle");
+            frame.render_widget(tab_info, layout[5]);
 
             let b1 = Block::default().title("Title").borders(Borders::ALL);
             let b2 = Block::default().title("Author").borders(Borders::ALL);
