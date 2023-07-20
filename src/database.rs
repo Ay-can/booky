@@ -10,7 +10,6 @@ use diesel::sqlite::Sqlite;
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use dirs_2::document_dir;
 
-
 use std::error::Error;
 use std::fs;
 
@@ -94,4 +93,16 @@ pub fn delete_book(app: &mut App) {
             app.state.select(Some(0))
         }
     }
+}
+
+pub fn search_book(input: &str) -> Vec<Book> {
+    let connection = &mut establish_connection();
+
+    let pattern = format!("%{}%", input);
+    let results = books
+        .select(Book::as_select())
+        .filter(title.like(pattern))
+        .load(connection)
+        .expect("Failed to find books");
+    results
 }

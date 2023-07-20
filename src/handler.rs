@@ -154,6 +154,10 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                     Some(task)
                 }
                 (KeyCode::Enter, SearchFieldFocus::ConfirmBtn) => {
+                    let input = task.input.into_lines().join("\n");
+
+                    app.items = database::search_book(&input);
+                    app.search_active = true;
                     app.search_popup = !app.search_popup;
                     None
                 }
@@ -204,7 +208,12 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             }
             KeyCode::Char('a') => {
                 app.book_edit_state = Some(BookState::default());
+                app.search_active = false;
                 app.show_popup = !app.show_popup;
+            }
+            // Clear search query
+            KeyCode::Char('r') => {
+                app.search_active = false;
             }
             KeyCode::Up | KeyCode::Char('k') => {
                 if app.items.len() != 0 {

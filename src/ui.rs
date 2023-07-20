@@ -35,9 +35,11 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     let stats_block = Paragraph::new(books_count).block(menu_block);
     frame.render_widget(stats_block, chunks[0]);
 
-    //let book_list = reader::read_json(app).expect("Failed");
-    let book_list = database::get_books(app);
-    let rows: Vec<Row> = book_list
+    if !app.search_active {
+        app.items = database::get_books(app);
+    }
+    let rows: Vec<Row> = app
+        .items
         .iter()
         .map(|i| {
             Row::new(vec![
@@ -268,7 +270,7 @@ fn render_search_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
             frame.render_widget(create_btn, buttons[1]);
             frame.render_widget(cancel_btn, buttons[2]);
 
-            let b1 = Block::default().title("Search:").borders(Borders::ALL);
+            let b1 = Block::default().title("Title:").borders(Borders::ALL);
 
             task.input.set_cursor_line_style(Style::default());
 
