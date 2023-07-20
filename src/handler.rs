@@ -206,7 +206,7 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 }
                 app.show_popup = !app.show_popup;
             }
-            KeyCode::Char('a') => {
+            KeyCode::Char('i') => {
                 app.book_edit_state = Some(BookState::default());
                 app.search_active = false;
                 app.show_popup = !app.show_popup;
