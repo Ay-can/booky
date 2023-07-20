@@ -316,7 +316,7 @@ fn render_help_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
 
         let p1 = Paragraph::new("i -> Add a new book");
         let p2 = Paragraph::new("d -> Delete current highlighted book(no confirmation)");
-        let p3 = Paragraph::new("hj/updown arrows -> to select a book");
+        let p3 = Paragraph::new("jk/updown arrows -> to select a book");
         let p4 = Paragraph::new("u -> Update current selected book");
         let p5 = Paragraph::new("/ -> Search for a book");
         let p6 = Paragraph::new("r -> Clear search");
