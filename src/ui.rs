@@ -308,6 +308,7 @@ fn render_help_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
                     Constraint::Length(1),
                     Constraint::Length(1),
                     Constraint::Length(1),
+                    Constraint::Length(1),
                 ]
                 .as_ref(),
             )
@@ -319,6 +320,7 @@ fn render_help_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
         let p4 = Paragraph::new("u -> Update current selected book");
         let p5 = Paragraph::new("/ -> Search for a book");
         let p6 = Paragraph::new("r -> Clear search");
+        let p7 = Paragraph::new("q -> Quit");
 
         frame.render_widget(p1, layout[0]);
         frame.render_widget(p2, layout[1]);
@@ -326,6 +328,7 @@ fn render_help_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
         frame.render_widget(p4, layout[3]);
         frame.render_widget(p5, layout[4]);
         frame.render_widget(p6, layout[5]);
+        frame.render_widget(p7, layout[6]);
     }
 }
 
