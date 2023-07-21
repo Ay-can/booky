@@ -55,6 +55,7 @@ If all goes well, booky will create a directory in `/documents/booky` containing
 - Add the ability to search/filter on more(author, genre, rating etc).
 - Add a logger to booky that shows the user if changes were made to the db like an CRUD operation
 - Add ability to export your books in json format, that way you can use them on your website I guess?
+- Better error handling
 
 ## Contributions
 I'm a rust noob, contributions are always welcome. Feel free to create an issue and to @ me. 
