@@ -82,22 +82,13 @@ pub fn handle_add_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 let author = task.author.into_lines().join("\n");
                 let genre = task.genre.into_lines().join("\n");
                 let status = task.status.into_lines().join("\n");
-                //rewrite this mess
-                let validate_rating = validate(&mut task.rating);
-                let mut rating = 0;
+                let start_date = task.start_date.into_lines().join("\n");
+                let rating = task.rating.lines()[0].parse::<i32>().unwrap_or_default();
 
-                if validate_rating {
-                    rating = task.rating.lines()[0].parse::<i32>().unwrap();
-                    if rating > 10 {
-                        rating = 10;
-                    }
-                } else {
-                    rating = 0;
-                }
+                let datetime = format!("{} 00:00:00", start_date);
+                let datetime = NaiveDateTime::parse_from_str(&datetime, "%Y-%m-%d %H:%M:%S")
+                    .unwrap_or_default();
 
-                let date_str = "2020-04-12 00:00:00";
-                let datetime =
-                    NaiveDateTime::parse_from_str(date_str, "%Y-%m-%d %H:%M:%S").unwrap();
                 let new_book = NewBook {
                     title,
                     author,
@@ -142,6 +133,11 @@ pub fn handle_add_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 task.status.input(key_event);
                 Some(task)
             }
+            (_, BookEditFocus::StartDate) => {
+                task.start_date.input(key_event);
+                Some(task)
+            }
+
             _ => Some(task),
         }
     } else {
@@ -216,6 +212,9 @@ pub fn handle_main_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                     genre: TextArea::from(current_book.genre.lines()),
                     rating: TextArea::from(current_book.rating.to_string().lines()),
                     status: TextArea::from(current_book.status.lines()),
+                    start_date: TextArea::from(
+                        current_book.start_date.unwrap().to_string().lines(),
+                    ),
                     focus: BookEditFocus::Title,
                     is_edit: true,
                 };

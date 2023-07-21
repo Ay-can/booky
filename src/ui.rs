@@ -88,7 +88,7 @@ fn render_main<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
 fn render_add_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     if app.add_popup {
         let block = Block::default().title("Add New Book").borders(Borders::ALL);
-        let area = centered_rect(45, 45, frame.size());
+        let area = centered_rect(45, 55, frame.size());
         let block_inner = block.inner(area);
         frame.render_widget(Clear, area);
         frame.render_widget(Paragraph::new("").block(block), area);
@@ -97,6 +97,7 @@ fn render_add_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
                 .direction(Direction::Vertical)
                 .constraints(
                     [
+                        Constraint::Length(3),
                         Constraint::Length(3),
                         Constraint::Length(3),
                         Constraint::Length(3),
@@ -119,7 +120,7 @@ fn render_add_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
                     ]
                     .as_ref(),
                 )
-                .split(layout[6]);
+                .split(layout[7]);
 
             let (create_style, cancel_style, create_txt, cancel_txt) = match task.focus {
                 BookEditFocus::ConfirmBtn => (
@@ -143,19 +144,23 @@ fn render_add_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
             frame.render_widget(cancel_btn, buttons[2]);
 
             let tab_info = Paragraph::new("[tab] / [shift + tab] to cycle");
-            frame.render_widget(tab_info, layout[5]);
+            frame.render_widget(tab_info, layout[6]);
 
             let b1 = Block::default().title("Title").borders(Borders::ALL);
             let b2 = Block::default().title("Author").borders(Borders::ALL);
             let b3 = Block::default().title("Genre").borders(Borders::ALL);
             let b4 = Block::default().title("Rating").borders(Borders::ALL);
             let b5 = Block::default().title("Status").borders(Borders::ALL);
+            let b6 = Block::default()
+                .title("StartDate (year/month/day)")
+                .borders(Borders::ALL);
 
             task.title.set_cursor_line_style(Style::default());
             task.author.set_cursor_line_style(Style::default());
             task.genre.set_cursor_line_style(Style::default());
             task.rating.set_cursor_line_style(Style::default());
             task.status.set_cursor_line_style(Style::default());
+            task.start_date.set_cursor_line_style(Style::default());
 
             task.title.set_block(b1);
 
@@ -217,6 +222,18 @@ fn render_add_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
                 task.status.set_cursor_style(Style::default());
             }
             frame.render_widget(task.status.widget(), layout[4]);
+
+            task.start_date.set_block(b6);
+            if let BookEditFocus::StartDate = task.focus {
+                task.start_date
+                    .set_style(Style::default().add_modifier(Modifier::BOLD));
+                task.start_date
+                    .set_cursor_style(Style::default().add_modifier(Modifier::REVERSED));
+            } else {
+                task.start_date.set_style(Style::default());
+                task.start_date.set_cursor_style(Style::default());
+            }
+            frame.render_widget(task.start_date.widget(), layout[5]);
         }
     }
 }

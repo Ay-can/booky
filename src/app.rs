@@ -8,7 +8,7 @@ use tui_textarea::TextArea;
 /// Application result type.
 pub type AppResult<T> = std::result::Result<T, Box<dyn error::Error>>;
 
-pub const EDIT_WINDOW_FOCUS: i8 = 7;
+pub const EDIT_WINDOW_FOCUS: i8 = 8;
 pub const SEARCH_WINDOW_FOCUS: i8 = 3;
 
 #[repr(i8)]
@@ -41,8 +41,9 @@ pub enum BookEditFocus {
     Genre = 2,
     Rating = 3,
     Status = 4,
-    ConfirmBtn = 5,
-    CancelBtn = 6,
+    StartDate = 5,
+    ConfirmBtn = 6,
+    CancelBtn = 7,
 }
 
 pub struct BookState<'a> {
@@ -51,6 +52,7 @@ pub struct BookState<'a> {
     pub genre: TextArea<'a>,
     pub rating: TextArea<'a>,
     pub status: TextArea<'a>,
+    pub start_date: TextArea<'a>,
     pub focus: BookEditFocus,
     pub is_edit: bool,
 }
@@ -63,6 +65,7 @@ impl Default for BookState<'_> {
             genre: TextArea::default(),
             rating: TextArea::default(),
             status: TextArea::default(),
+            start_date: TextArea::default(),
             focus: BookEditFocus::Title,
             is_edit: false,
         }
