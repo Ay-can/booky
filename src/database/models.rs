@@ -11,7 +11,8 @@ pub struct Book {
     pub genre: String,
     pub rating: i32,
     pub status: String,
-    pub start_date: Option<chrono::NaiveDateTime>,
+    pub start_date: Option<chrono::NaiveDate>,
+    pub end_date: Option<chrono::NaiveDate>,
 }
 
 #[derive(Insertable, AsChangeset)]
@@ -22,5 +23,6 @@ pub struct NewBook {
     pub genre: String,
     pub rating: i32,
     pub status: String,
-    pub start_date: Option<chrono::NaiveDateTime>,
+    pub start_date: Option<chrono::NaiveDate>,
+    pub end_date: Option<chrono::NaiveDate>,
 }

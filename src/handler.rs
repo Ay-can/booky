@@ -4,7 +4,7 @@ use crate::app::{
 };
 use crate::database;
 use crate::database::models::NewBook;
-use chrono::{DateTime, Local, NaiveDateTime, Utc};
+use chrono::NaiveDate;
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use int_enum::IntEnum;
 use std::error;
@@ -84,10 +84,7 @@ pub fn handle_add_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 let status = task.status.into_lines().join("\n");
                 let start_date = task.start_date.into_lines().join("\n");
                 let rating = task.rating.lines()[0].parse::<i32>().unwrap_or_default();
-
-                let datetime = format!("{} 00:00:00", start_date);
-                let datetime = NaiveDateTime::parse_from_str(&datetime, "%Y-%m-%d %H:%M:%S")
-                    .unwrap_or_default();
+                let date = NaiveDate::parse_from_str(&start_date, "%Y-%m-%d").unwrap_or_default();
 
                 let new_book = NewBook {
                     title,
@@ -95,7 +92,8 @@ pub fn handle_add_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                     genre,
                     rating,
                     status,
-                    start_date: Some(datetime),
+                    start_date: Some(date),
+                    end_date: Some(date),
                 };
                 if !task.is_edit {
                     database::create_book(new_book);
@@ -135,6 +133,10 @@ pub fn handle_add_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             }
             (_, BookEditFocus::StartDate) => {
                 task.start_date.input(key_event);
+                Some(task)
+            }
+            (_, BookEditFocus::EndDate) => {
+                task.end_date.input(key_event);
                 Some(task)
             }
 
@@ -215,6 +217,7 @@ pub fn handle_main_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                     start_date: TextArea::from(
                         current_book.start_date.unwrap().to_string().lines(),
                     ),
+                    end_date: TextArea::from(current_book.end_date.unwrap().to_string().lines()),
                     focus: BookEditFocus::Title,
                     is_edit: true,
                 };

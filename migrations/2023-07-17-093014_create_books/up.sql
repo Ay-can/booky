@@ -6,5 +6,6 @@ CREATE TABLE books (
 	genre VARCHAR NOT NULL,
 	rating INTEGER NOT NULL,
 	status VARCHAR NOT NULL,
-	start_date DATE
+	start_date DATE,
+	end_date DATE
 )
