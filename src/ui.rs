@@ -58,24 +58,37 @@ fn render_main<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
                 i.genre.to_string(),
                 i.rating.to_string(),
                 i.status.to_string(),
+                i.start_date.unwrap().to_string(),
+                i.end_date.unwrap().to_string(),
             ])
         })
         .collect();
-    let headers = Row::new(vec!["Id", "Title", "Author", "Genre", "Rating", "Status"]);
+    let headers = Row::new(vec![
+        "Id",
+        "Title",
+        "Author",
+        "Genre",
+        "Rating",
+        "Status",
+        "StartDate",
+        "EndDate",
+    ]);
 
     let table = Table::new(rows)
         .header(headers.style(Style::default().fg(Color::Yellow)))
         .block(Block::default().borders(Borders::ALL))
-        .column_spacing(5)
+        .column_spacing(3)
         .highlight_style(Style::default().add_modifier(Modifier::REVERSED))
         .highlight_symbol(">>")
         .widths(&[
+            Constraint::Length(2),
+            Constraint::Length(20),
+            Constraint::Length(20),
             Constraint::Length(10),
-            Constraint::Length(20),
-            Constraint::Length(20),
-            Constraint::Length(20),
-            Constraint::Length(20),
-            Constraint::Length(20),
+            Constraint::Length(10),
+            Constraint::Length(10),
+            Constraint::Length(10),
+            Constraint::Length(10),
         ]);
 
     frame.render_stateful_widget(table, chunks[1], &mut app.state);

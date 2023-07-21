@@ -22,7 +22,7 @@ pub fn change_add_focus(
     } else {
         let mut current_value = (task.focus.int_value() - 1) % EDIT_WINDOW_FOCUS;
         if current_value < 0 {
-            current_value = 6;
+            current_value = 8;
         }
         current_value
     };
