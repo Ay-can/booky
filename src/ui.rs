@@ -11,7 +11,16 @@ use tui::{
 
 /// Renders the user interface widgets.
 pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
-    // REFACTOR AND PUT EVERYTHING IN FUNCTIONS
+    // Render header, body and footer of booky.
+    render_main(app, frame);
+
+    // Render activated popups
+    render_add_popup(app, frame);
+    render_help_popup(app, frame);
+    render_search_popup(app, frame);
+}
+
+fn render_main<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(5)
@@ -74,11 +83,6 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     let footer = Block::default().title("Log").borders(Borders::ALL);
     let temp_info = Paragraph::new("Press ? to access the help menu").block(footer);
     frame.render_widget(temp_info, chunks[2]);
-
-    // Render activated popups
-    render_add_popup(app, frame);
-    render_help_popup(app, frame);
-    render_search_popup(app, frame);
 }
 
 fn render_add_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
