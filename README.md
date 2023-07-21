@@ -47,7 +47,7 @@ If all goes well, booky will create a directory in `/documents/booky` containing
 - `q` -> Quit booky
   
 ## TODO
-- Refactor a bunch of code, most importantly `handler.rs` and `ui.rs`(yucky yucky).
+- Refactor a bunch of code.
 - Make booky render the ui better on smaller terminals, currently booky works best on a full screen terminal.
 - Make booky look a little nicer with more colors.
 - Add dates to the books that you've read with chrono, startdate and enddate.
