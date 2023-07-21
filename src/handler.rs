@@ -48,23 +48,6 @@ pub fn change_search_focus(
     Ok(())
 }
 
-// Put this function in ui.rs
-fn validate(textarea: &mut TextArea) -> bool {
-    if let Err(err) = textarea.lines()[0].parse::<f64>() {
-        textarea.set_style(Style::default().fg(Color::LightRed));
-        textarea.set_block(
-            Block::default()
-                .borders(Borders::ALL)
-                .title(format!("ERROR: {}", err)),
-        );
-        false
-    } else {
-        textarea.set_style(Style::default().fg(Color::LightGreen));
-        textarea.set_block(Block::default().borders(Borders::ALL).title("OK"));
-        true
-    }
-}
-
 pub fn handle_add_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
     let updated_task = if let Some(mut task) = app.book_edit_state.take() {
         match (key_event.code, task.focus) {
