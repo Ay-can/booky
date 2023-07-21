@@ -4,7 +4,7 @@ use crate::app::{
 };
 use crate::database;
 use crate::database::models::NewBook;
-use chrono::NaiveDate;
+use chrono::{Local, NaiveDate};
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use int_enum::IntEnum;
 use std::error;
@@ -83,8 +83,14 @@ pub fn handle_add_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 let genre = task.genre.into_lines().join("\n");
                 let status = task.status.into_lines().join("\n");
                 let start_date = task.start_date.into_lines().join("\n");
+                let end_date = task.end_date.into_lines().join("\n");
                 let rating = task.rating.lines()[0].parse::<i32>().unwrap_or_default();
-                let date = NaiveDate::parse_from_str(&start_date, "%Y-%m-%d").unwrap_or_default();
+
+                let default_date = Local::now().naive_local();
+                let start_date = NaiveDate::parse_from_str(&start_date, "%Y-%m-%d")
+                    .unwrap_or(default_date.into());
+                let end_date =
+                    NaiveDate::parse_from_str(&end_date, "%Y-%m-%d").unwrap_or(default_date.into());
 
                 let new_book = NewBook {
                     title,
@@ -92,8 +98,8 @@ pub fn handle_add_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                     genre,
                     rating,
                     status,
-                    start_date: Some(date),
-                    end_date: Some(date),
+                    start_date: Some(start_date),
+                    end_date: Some(end_date),
                 };
                 if !task.is_edit {
                     database::create_book(new_book);
