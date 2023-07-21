@@ -154,10 +154,42 @@ pub fn handle_search_events(key_event: KeyEvent, app: &mut App) -> AppResult<()>
                 task.input.input(key_event);
                 Some(task)
             }
+            (_, SearchFieldFocus::Author) => {
+                task.author.input(key_event);
+                Some(task)
+            }
+            (_, SearchFieldFocus::Genre) => {
+                task.genre.input(key_event);
+                Some(task)
+            }
+            (_, SearchFieldFocus::Rating) => {
+                task.rating.input(key_event);
+                Some(task)
+            }
+            (_, SearchFieldFocus::Status) => {
+                task.status.input(key_event);
+                Some(task)
+            }
+
             (KeyCode::Enter, SearchFieldFocus::ConfirmBtn) => {
                 let input = task.input.into_lines().join("\n");
+                let other_author = task.author.into_lines().join("\n");
+                let genre = task.genre.into_lines().join("\n");
+                let rating = task.rating.lines()[0].parse::<i32>().unwrap_or_default();
+                let status = task.status.into_lines().join("\n");
 
-                app.items = database::search_book(&input);
+                let current_date = Local::now().naive_local();
+                let book_info = NewBook {
+                    title: input,
+                    author: other_author,
+                    genre,
+                    rating,
+                    status,
+                    start_date: Some(current_date.into()),
+                    end_date: Some(current_date.into()),
+                };
+
+                app.items = database::search_book(book_info);
                 app.search_active = true;
                 app.search_popup = !app.search_popup;
                 None

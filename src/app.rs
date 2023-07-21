@@ -9,18 +9,26 @@ use tui_textarea::TextArea;
 pub type AppResult<T> = std::result::Result<T, Box<dyn error::Error>>;
 
 pub const EDIT_WINDOW_FOCUS: i8 = 9;
-pub const SEARCH_WINDOW_FOCUS: i8 = 3;
+pub const SEARCH_WINDOW_FOCUS: i8 = 7;
 
 #[repr(i8)]
 #[derive(Debug, IntEnum, Clone, Copy)]
 pub enum SearchFieldFocus {
     Input = 0,
-    ConfirmBtn = 1,
-    CancelBtn = 2,
+    Author = 1,
+    Genre = 2,
+    Rating = 3,
+    Status = 4,
+    ConfirmBtn = 5,
+    CancelBtn = 6,
 }
 
 pub struct SearchState<'a> {
     pub input: TextArea<'a>,
+    pub author: TextArea<'a>,
+    pub genre: TextArea<'a>,
+    pub rating: TextArea<'a>,
+    pub status: TextArea<'a>,
     pub focus: SearchFieldFocus,
 }
 
@@ -28,6 +36,10 @@ impl Default for SearchState<'_> {
     fn default() -> Self {
         SearchState {
             input: TextArea::default(),
+            author: TextArea::default(),
+            genre: TextArea::default(),
+            rating: TextArea::default(),
+            status: TextArea::default(),
             focus: SearchFieldFocus::Input,
         }
     }

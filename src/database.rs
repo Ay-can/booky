@@ -95,13 +95,21 @@ pub fn delete_book(app: &mut App) {
     }
 }
 
-pub fn search_book(input: &str) -> Vec<Book> {
+pub fn search_book(book_info: NewBook) -> Vec<Book> {
     let connection = &mut establish_connection();
 
-    let pattern = format!("%{}%", input);
+    // TEMP
+    let pattern = format!("%{}%", book_info.title);
+    let test_1 = format!("%{}%", book_info.author);
+    let test_2 = format!("%{}%", book_info.genre);
+    let test_4 = format!("%{}%", book_info.status);
     let results = books
         .select(Book::as_select())
         .filter(title.like(pattern))
+        .filter(author.like(test_1))
+        .filter(genre.like(test_2))
+        .filter(status.like(test_4))
+        .filter(rating.eq(book_info.rating))
         .load(connection)
         .expect("Failed to find books");
     results

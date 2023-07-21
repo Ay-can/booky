@@ -15,7 +15,7 @@ pub struct Book {
     pub end_date: Option<chrono::NaiveDate>,
 }
 
-#[derive(Insertable, AsChangeset)]
+#[derive(Insertable, AsChangeset, Debug)]
 #[diesel(table_name = books)]
 pub struct NewBook {
     pub title: String,

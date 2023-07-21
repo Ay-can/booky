@@ -271,7 +271,7 @@ fn render_add_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
 fn render_search_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     if app.search_popup {
         let block = Block::default().title("Search Book").borders(Borders::ALL);
-        let area = centered_rect(40, 40, frame.size());
+        let area = centered_rect(40, 50, frame.size());
         let block_inner = block.inner(area);
         frame.render_widget(Clear, area);
         frame.render_widget(Paragraph::new("").block(block), area);
@@ -341,6 +341,74 @@ fn render_search_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
                 task.input.set_cursor_style(Style::default());
             }
             frame.render_widget(task.input.widget(), layout[0]);
+
+            let b2 = Block::default().title("Author:").borders(Borders::ALL);
+
+            task.author.set_cursor_line_style(Style::default());
+
+            task.author.set_block(b2);
+
+            if let SearchFieldFocus::Author = task.focus {
+                task.author
+                    .set_style(Style::default().add_modifier(Modifier::BOLD));
+                task.author
+                    .set_cursor_style(Style::default().add_modifier(Modifier::REVERSED))
+            } else {
+                task.author.set_style(Style::default());
+                task.author.set_cursor_style(Style::default());
+            }
+            frame.render_widget(task.author.widget(), layout[1]);
+
+            let b3 = Block::default().title("Genre:").borders(Borders::ALL);
+
+            task.genre.set_cursor_line_style(Style::default());
+
+            task.genre.set_block(b3);
+
+            if let SearchFieldFocus::Genre = task.focus {
+                task.genre
+                    .set_style(Style::default().add_modifier(Modifier::BOLD));
+                task.genre
+                    .set_cursor_style(Style::default().add_modifier(Modifier::REVERSED))
+            } else {
+                task.genre.set_style(Style::default());
+                task.genre.set_cursor_style(Style::default());
+            }
+            frame.render_widget(task.genre.widget(), layout[2]);
+
+            let b4 = Block::default().title("Rating:").borders(Borders::ALL);
+
+            task.rating.set_cursor_line_style(Style::default());
+
+            task.rating.set_block(b4);
+
+            if let SearchFieldFocus::Rating = task.focus {
+                task.rating
+                    .set_style(Style::default().add_modifier(Modifier::BOLD));
+                task.rating
+                    .set_cursor_style(Style::default().add_modifier(Modifier::REVERSED))
+            } else {
+                task.rating.set_style(Style::default());
+                task.rating.set_cursor_style(Style::default());
+            }
+            frame.render_widget(task.rating.widget(), layout[3]);
+
+            let b5 = Block::default().title("Status:").borders(Borders::ALL);
+
+            task.status.set_cursor_line_style(Style::default());
+
+            task.status.set_block(b5);
+
+            if let SearchFieldFocus::Status = task.focus {
+                task.status
+                    .set_style(Style::default().add_modifier(Modifier::BOLD));
+                task.status
+                    .set_cursor_style(Style::default().add_modifier(Modifier::REVERSED))
+            } else {
+                task.status.set_style(Style::default());
+                task.status.set_cursor_style(Style::default());
+            }
+            frame.render_widget(task.status.widget(), layout[4]);
         }
     }
 }
