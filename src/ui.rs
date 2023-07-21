@@ -75,7 +75,13 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     let temp_info = Paragraph::new("Press ? to access the help menu").block(footer);
     frame.render_widget(temp_info, chunks[2]);
 
-    // Popup
+    // Render activated popups
+    render_add_popup(app, frame);
+    render_help_popup(app, frame);
+    render_search_popup(app, frame);
+}
+
+fn render_add_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     if app.add_popup {
         let block = Block::default().title("Add New Book").borders(Borders::ALL);
         let area = centered_rect(45, 45, frame.size());
@@ -209,8 +215,6 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
             frame.render_widget(task.status.widget(), layout[4]);
         }
     }
-    render_help_popup(app, frame);
-    render_search_popup(app, frame);
 }
 
 fn render_search_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
