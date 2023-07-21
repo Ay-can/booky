@@ -72,7 +72,7 @@ impl Default for BookState<'_> {
 /// Application.
 pub struct App<'a> {
     pub running: bool,
-    pub show_popup: bool,
+    pub add_popup: bool,
     pub help_popup: bool,
     pub search_popup: bool,
     pub search_active: bool,
@@ -86,7 +86,7 @@ impl Default for App<'_> {
     fn default() -> Self {
         Self {
             running: true,
-            show_popup: false,
+            add_popup: false,
             help_popup: false,
             search_popup: false,
             search_active: false,

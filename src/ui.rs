@@ -76,7 +76,7 @@ pub fn render<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     frame.render_widget(temp_info, chunks[2]);
 
     // Popup
-    if app.show_popup {
+    if app.add_popup {
         let block = Block::default().title("Add New Book").borders(Borders::ALL);
         let area = centered_rect(45, 45, frame.size());
         let block_inner = block.inner(area);

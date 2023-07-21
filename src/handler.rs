@@ -109,11 +109,11 @@ pub fn handle_add_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                         database::update_book(current_id, new_book);
                     }
                 }
-                app.show_popup = !app.show_popup;
+                app.add_popup = !app.add_popup;
                 None
             }
             (KeyCode::Enter, BookEditFocus::CancelBtn) => {
-                app.show_popup = !app.show_popup;
+                app.add_popup = !app.add_popup;
                 None
             }
             (KeyCode::Enter, BookEditFocus::Title) => Some(task),
@@ -216,12 +216,12 @@ pub fn handle_main_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 };
                 app.book_edit_state = Some(new_book_state);
             }
-            app.show_popup = !app.show_popup;
+            app.add_popup = !app.add_popup;
         }
         KeyCode::Char('i') => {
             app.book_edit_state = Some(BookState::default());
             app.search_active = false;
-            app.show_popup = !app.show_popup;
+            app.add_popup = !app.add_popup;
         }
         // Clear search query
         KeyCode::Char('r') => {
