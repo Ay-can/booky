@@ -8,5 +8,6 @@ diesel::table! {
         genre -> Text,
         rating -> Integer,
         status -> Text,
+        start_date -> Nullable<Timestamp>,
     }
 }

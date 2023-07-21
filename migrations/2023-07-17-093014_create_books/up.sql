@@ -5,5 +5,6 @@ CREATE TABLE books (
 	author VARCHAR NOT NULL,
 	genre VARCHAR NOT NULL,
 	rating INTEGER NOT NULL,
-	status VARCHAR NOT NULL
+	status VARCHAR NOT NULL,
+	start_date DATE
 )

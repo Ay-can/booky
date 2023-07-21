@@ -4,6 +4,7 @@ use crate::app::{
 };
 use crate::database;
 use crate::database::models::NewBook;
+use chrono::{DateTime, Local, NaiveDateTime, Utc};
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use int_enum::IntEnum;
 use std::error;
@@ -94,12 +95,16 @@ pub fn handle_add_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                     rating = 0;
                 }
 
+                let date_str = "2020-04-12 00:00:00";
+                let datetime =
+                    NaiveDateTime::parse_from_str(date_str, "%Y-%m-%d %H:%M:%S").unwrap();
                 let new_book = NewBook {
                     title,
                     author,
                     genre,
                     rating,
                     status,
+                    start_date: Some(datetime),
                 };
                 if !task.is_edit {
                     database::create_book(new_book);
