@@ -60,6 +60,11 @@ fn render_main<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
                 i.status.to_string(),
                 i.start_date.unwrap().to_string(),
                 i.end_date.unwrap().to_string(),
+                i.end_date
+                    .unwrap()
+                    .signed_duration_since(i.start_date.unwrap())
+                    .num_days()
+                    .to_string(),
             ])
         })
         .collect();
@@ -72,6 +77,7 @@ fn render_main<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
         "Status",
         "StartDate",
         "EndDate",
+        "Finished (days)",
     ]);
 
     let table = Table::new(rows)
@@ -89,6 +95,7 @@ fn render_main<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
             Constraint::Length(10),
             Constraint::Length(10),
             Constraint::Length(10),
+            Constraint::Length(15),
         ]);
 
     frame.render_stateful_widget(table, chunks[1], &mut app.state);
