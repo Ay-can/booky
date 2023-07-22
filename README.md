@@ -51,7 +51,6 @@ If all goes well, booky will create a directory in `/documents/booky` containing
 - Make booky render the ui better on smaller terminals, currently booky works best on a full screen terminal.
 - Make booky look a little nicer with more colors.
 - Create a statistics tab that shows you how many books you've read this month/year, how many per genre and more.
-- Add the ability to search/filter on more(author, genre, rating etc).
 - Add a logger to booky that shows the user if changes were made to the db like an CRUD operation
 - Add ability to export your books in json format, that way you can use them on your website I guess?
 - Better error handling
