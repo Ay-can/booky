@@ -4,7 +4,7 @@ use crate::app::{
 };
 use crate::database;
 use crate::database::models::NewBook;
-use chrono::{Local, NaiveDate};
+use chrono::{DateTime, Datelike, Local, NaiveDate};
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use int_enum::IntEnum;
 use std::error;
@@ -188,11 +188,20 @@ pub fn handle_search_events(key_event: KeyEvent, app: &mut App) -> AppResult<()>
                 let start_date = task.start_date.into_lines().join("\n");
                 let end_date = task.end_date.into_lines().join("\n");
 
-                let default_date = Local::now().naive_local();
+                // If the user doesn't provide a date to search/filter
+                // default to searching for a book that has a startdate of > 1500
+                // end an end date of 4050 <
+                // Startdate doesn't mean releasedate, instead it means the date you read
+                // the book, the reason I do this is because other wise it doesn't filter
+                // correctly in database.rs
+                // If you are reading this from 4050 I'm sorry.
+
+                let default_start_date = NaiveDate::from_ymd(1500, 1, 1);
+                let default_end_date = NaiveDate::from_ymd(4050, 1, 1);
                 let start_date = NaiveDate::parse_from_str(&start_date, "%Y-%m-%d")
-                    .unwrap_or(default_date.into());
-                let end_date =
-                    NaiveDate::parse_from_str(&end_date, "%Y-%m-%d").unwrap_or(default_date.into());
+                    .unwrap_or(default_start_date.into());
+                let end_date = NaiveDate::parse_from_str(&end_date, "%Y-%m-%d")
+                    .unwrap_or(default_end_date.into());
 
                 let book_info = NewBook {
                     title,
