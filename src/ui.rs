@@ -327,20 +327,20 @@ fn render_search_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
 
             let b1 = Block::default().title("Title:").borders(Borders::ALL);
 
-            task.input.set_cursor_line_style(Style::default());
+            task.title.set_cursor_line_style(Style::default());
 
-            task.input.set_block(b1);
+            task.title.set_block(b1);
 
-            if let SearchFieldFocus::Input = task.focus {
-                task.input
+            if let SearchFieldFocus::Title = task.focus {
+                task.title
                     .set_style(Style::default().add_modifier(Modifier::BOLD));
-                task.input
+                task.title
                     .set_cursor_style(Style::default().add_modifier(Modifier::REVERSED))
             } else {
-                task.input.set_style(Style::default());
-                task.input.set_cursor_style(Style::default());
+                task.title.set_style(Style::default());
+                task.title.set_cursor_style(Style::default());
             }
-            frame.render_widget(task.input.widget(), layout[0]);
+            frame.render_widget(task.title.widget(), layout[0]);
 
             let b2 = Block::default().title("Author:").borders(Borders::ALL);
 

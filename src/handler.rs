@@ -149,9 +149,9 @@ pub fn handle_search_events(key_event: KeyEvent, app: &mut App) -> AppResult<()>
                 change_search_focus(&mut task, false)?;
                 Some(task)
             }
-            (KeyCode::Enter, SearchFieldFocus::Input) => Some(task),
-            (_, SearchFieldFocus::Input) => {
-                task.input.input(key_event);
+            (KeyCode::Enter, SearchFieldFocus::Title) => Some(task),
+            (_, SearchFieldFocus::Title) => {
+                task.title.input(key_event);
                 Some(task)
             }
             (_, SearchFieldFocus::Author) => {
@@ -172,7 +172,7 @@ pub fn handle_search_events(key_event: KeyEvent, app: &mut App) -> AppResult<()>
             }
 
             (KeyCode::Enter, SearchFieldFocus::ConfirmBtn) => {
-                let input = task.input.into_lines().join("\n");
+                let title = task.title.into_lines().join("\n");
                 let other_author = task.author.into_lines().join("\n");
                 let genre = task.genre.into_lines().join("\n");
                 let rating = task.rating.lines()[0].parse::<i32>().unwrap_or_default();
@@ -180,7 +180,7 @@ pub fn handle_search_events(key_event: KeyEvent, app: &mut App) -> AppResult<()>
 
                 let current_date = Local::now().naive_local();
                 let book_info = NewBook {
-                    title: input,
+                    title,
                     author: other_author,
                     genre,
                     rating,

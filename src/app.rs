@@ -14,7 +14,7 @@ pub const SEARCH_WINDOW_FOCUS: i8 = 7;
 #[repr(i8)]
 #[derive(Debug, IntEnum, Clone, Copy)]
 pub enum SearchFieldFocus {
-    Input = 0,
+    Title = 0,
     Author = 1,
     Genre = 2,
     Rating = 3,
@@ -24,7 +24,7 @@ pub enum SearchFieldFocus {
 }
 
 pub struct SearchState<'a> {
-    pub input: TextArea<'a>,
+    pub title: TextArea<'a>,
     pub author: TextArea<'a>,
     pub genre: TextArea<'a>,
     pub rating: TextArea<'a>,
@@ -35,12 +35,12 @@ pub struct SearchState<'a> {
 impl Default for SearchState<'_> {
     fn default() -> Self {
         SearchState {
-            input: TextArea::default(),
+            title: TextArea::default(),
             author: TextArea::default(),
             genre: TextArea::default(),
             rating: TextArea::default(),
             status: TextArea::default(),
-            focus: SearchFieldFocus::Input,
+            focus: SearchFieldFocus::Title,
         }
     }
 }
