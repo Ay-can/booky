@@ -40,7 +40,7 @@ pub fn change_search_focus(
     } else {
         let mut current_value = (task.focus.int_value() - 1) % SEARCH_WINDOW_FOCUS;
         if current_value < 0 {
-            current_value = 2;
+            current_value = 8;
         }
         current_value
     };
@@ -170,23 +170,38 @@ pub fn handle_search_events(key_event: KeyEvent, app: &mut App) -> AppResult<()>
                 task.status.input(key_event);
                 Some(task)
             }
+            (_, SearchFieldFocus::StartDate) => {
+                task.start_date.input(key_event);
+                Some(task)
+            }
+            (_, SearchFieldFocus::EndDate) => {
+                task.end_date.input(key_event);
+                Some(task)
+            }
 
             (KeyCode::Enter, SearchFieldFocus::ConfirmBtn) => {
                 let title = task.title.into_lines().join("\n");
-                let other_author = task.author.into_lines().join("\n");
+                let author = task.author.into_lines().join("\n");
                 let genre = task.genre.into_lines().join("\n");
                 let rating = task.rating.lines()[0].parse::<i32>().unwrap_or_default();
                 let status = task.status.into_lines().join("\n");
+                let start_date = task.start_date.into_lines().join("\n");
+                let end_date = task.end_date.into_lines().join("\n");
 
-                let current_date = Local::now().naive_local();
+                let default_date = Local::now().naive_local();
+                let start_date = NaiveDate::parse_from_str(&start_date, "%Y-%m-%d")
+                    .unwrap_or(default_date.into());
+                let end_date =
+                    NaiveDate::parse_from_str(&end_date, "%Y-%m-%d").unwrap_or(default_date.into());
+
                 let book_info = NewBook {
                     title,
-                    author: other_author,
+                    author,
                     genre,
                     rating,
                     status,
-                    start_date: Some(current_date.into()),
-                    end_date: Some(current_date.into()),
+                    start_date: Some(start_date),
+                    end_date: Some(end_date),
                 };
 
                 app.items = database::search_book(book_info);
