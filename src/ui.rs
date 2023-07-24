@@ -277,7 +277,9 @@ fn render_add_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
 
 fn render_search_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     if app.search_popup {
-        let block = Block::default().title("Search Book").borders(Borders::ALL);
+        let block = Block::default()
+            .title("Search/Filter")
+            .borders(Borders::ALL);
         let area = centered_rect(40, 55, frame.size());
         let block_inner = block.inner(area);
         frame.render_widget(Clear, area);
