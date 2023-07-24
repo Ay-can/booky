@@ -24,8 +24,9 @@ This project suffers from noobiness, I'm learning Rust and a bunch of things at 
   
 ## Showcase
 ![image](https://github.com/Ay-can/booky/assets/61593654/98beb723-3757-4bf2-9459-c3ffec139e5b)
-![image](https://github.com/Ay-can/booky/assets/61593654/b92287cf-7601-48a6-8da7-2a68dee7904a)
-![image](https://github.com/Ay-can/booky/assets/61593654/0147bb38-e1c0-44c3-9dae-026c8b04121e)
+![image](https://github.com/Ay-can/booky/assets/61593654/3569d78e-a717-4600-aa33-db21b4d17b6f)
+![image](https://github.com/Ay-can/booky/assets/61593654/effc9811-2623-49c4-863b-42698b023b98)
+
 
 
 ## Building and Installing
