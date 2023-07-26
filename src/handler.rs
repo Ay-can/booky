@@ -5,7 +5,7 @@ use crate::app::{
 use crate::database;
 use crate::database::models::NewBook;
 use chrono::{Local, NaiveDate};
-use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
+use crossterm::event::{KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 use int_enum::IntEnum;
 use std::error;
 
@@ -58,7 +58,6 @@ pub fn handle_add_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 change_add_focus(&mut task, false)?;
                 Some(task)
             }
-
             (KeyCode::Enter, BookEditFocus::ConfirmBtn) => {
                 let title = task.title.into_lines().join("\n");
                 let author = task.author.into_lines().join("\n");
@@ -127,7 +126,6 @@ pub fn handle_add_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 task.end_date.input(key_event);
                 Some(task)
             }
-
             _ => Some(task),
         }
     } else {
@@ -177,7 +175,6 @@ pub fn handle_search_events(key_event: KeyEvent, app: &mut App) -> AppResult<()>
                 task.end_date.input(key_event);
                 Some(task)
             }
-
             (KeyCode::Enter, SearchFieldFocus::ConfirmBtn) => {
                 let title = task.title.into_lines().join("\n");
                 let author = task.author.into_lines().join("\n");
@@ -302,12 +299,17 @@ pub fn handle_main_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
 
 /// Handles the key events and updates the state of [`App`].
 pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
-    if app.book_edit_state.is_some() {
-        handle_add_events(key_event, app).expect("Failed to handle events related to adding");
-    } else if app.search_field_state.is_some() {
-        handle_search_events(key_event, app).expect("Failed to handle events related to searching");
-    } else {
-        handle_main_events(key_event, app).expect("Failed to handle main events");
+    // Only handle Press or Repeat events, ignore Release events
+    // Without this check terminal will register two events for each key press on some platforms
+    if key_event.kind == KeyEventKind::Press || key_event.kind == KeyEventKind::Repeat {
+        if app.book_edit_state.is_some() {
+            handle_add_events(key_event, app).expect("Failed to handle events related to adding");
+        } else if app.search_field_state.is_some() {
+            handle_search_events(key_event, app)
+                .expect("Failed to handle events related to searching");
+        } else {
+            handle_main_events(key_event, app).expect("Failed to handle main events");
+        }
     }
     Ok(())
 }
