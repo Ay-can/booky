@@ -4,12 +4,11 @@ use crate::app::{
 };
 use crate::database;
 use crate::database::models::NewBook;
-use chrono::{DateTime, Datelike, Local, NaiveDate};
-use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
+use chrono::{Local, NaiveDate};
+use crossterm::event::{KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 use int_enum::IntEnum;
 use std::error;
-use tui::style::{Color, Style};
-use tui::widgets::{Block, Borders};
+
 use tui_textarea::TextArea;
 
 // This function allows us to change the focus when pressing tab in the add/update menu
@@ -59,7 +58,6 @@ pub fn handle_add_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 change_add_focus(&mut task, false)?;
                 Some(task)
             }
-
             (KeyCode::Enter, BookEditFocus::ConfirmBtn) => {
                 let title = task.title.into_lines().join("\n");
                 let author = task.author.into_lines().join("\n");
@@ -128,7 +126,6 @@ pub fn handle_add_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 task.end_date.input(key_event);
                 Some(task)
             }
-
             _ => Some(task),
         }
     } else {
@@ -178,7 +175,6 @@ pub fn handle_search_events(key_event: KeyEvent, app: &mut App) -> AppResult<()>
                 task.end_date.input(key_event);
                 Some(task)
             }
-
             (KeyCode::Enter, SearchFieldFocus::ConfirmBtn) => {
                 let title = task.title.into_lines().join("\n");
                 let author = task.author.into_lines().join("\n");
@@ -196,8 +192,8 @@ pub fn handle_search_events(key_event: KeyEvent, app: &mut App) -> AppResult<()>
                 // correctly in database.rs
                 // If you are reading this from 4050 I'm sorry.
 
-                let default_start_date = NaiveDate::from_ymd(1500, 1, 1);
-                let default_end_date = NaiveDate::from_ymd(4050, 1, 1);
+                let default_start_date = NaiveDate::from_ymd_opt(1500, 1, 1).unwrap();
+                let default_end_date = NaiveDate::from_ymd_opt(4050, 1, 1).unwrap();
                 let start_date = NaiveDate::parse_from_str(&start_date, "%Y-%m-%d")
                     .unwrap_or(default_start_date.into());
                 let end_date = NaiveDate::parse_from_str(&end_date, "%Y-%m-%d")
@@ -303,12 +299,17 @@ pub fn handle_main_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
 
 /// Handles the key events and updates the state of [`App`].
 pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
-    if app.book_edit_state.is_some() {
-        handle_add_events(key_event, app).expect("Failed to handle events related to adding");
-    } else if app.search_field_state.is_some() {
-        handle_search_events(key_event, app).expect("Failed to handle events related to searching");
-    } else {
-        handle_main_events(key_event, app).expect("Failed to handle main events");
+    // Only handle Press or Repeat events, ignore Release events
+    // Without this check terminal will register two events for each key press on some platforms
+    if key_event.kind == KeyEventKind::Press || key_event.kind == KeyEventKind::Repeat {
+        if app.book_edit_state.is_some() {
+            handle_add_events(key_event, app).expect("Failed to handle events related to adding");
+        } else if app.search_field_state.is_some() {
+            handle_search_events(key_event, app)
+                .expect("Failed to handle events related to searching");
+        } else {
+            handle_main_events(key_event, app).expect("Failed to handle main events");
+        }
     }
     Ok(())
 }

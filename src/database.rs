@@ -29,7 +29,7 @@ pub fn establish_connection() -> SqliteConnection {
         .join("booky");
 
     if !booky_dir.exists() {
-        fs::create_dir(booky_dir);
+        fs::create_dir(booky_dir).expect("Failed to create booky directory");
     }
 
     let document_path = document_dir()
@@ -42,7 +42,7 @@ pub fn establish_connection() -> SqliteConnection {
     let mut connection = SqliteConnection::establish(&document_path)
         .unwrap_or_else(|_| panic!("Error connecting to"));
 
-    run_migrations(&mut connection);
+    run_migrations(&mut connection).expect("Failed to run migrations");
     connection
 }
 
