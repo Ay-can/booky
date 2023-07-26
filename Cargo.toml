@@ -37,4 +37,10 @@ features = ["bundled"]
 [dependencies.chrono]
 version = "*"
 
+[dependencies.log]
+version = "*"
+
+[dependencies.env_logger]
+version = "*"
+
 
