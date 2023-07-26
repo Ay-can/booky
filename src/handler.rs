@@ -4,12 +4,11 @@ use crate::app::{
 };
 use crate::database;
 use crate::database::models::NewBook;
-use chrono::{DateTime, Datelike, Local, NaiveDate};
+use chrono::{Local, NaiveDate};
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use int_enum::IntEnum;
 use std::error;
-use tui::style::{Color, Style};
-use tui::widgets::{Block, Borders};
+
 use tui_textarea::TextArea;
 
 // This function allows us to change the focus when pressing tab in the add/update menu
@@ -196,8 +195,8 @@ pub fn handle_search_events(key_event: KeyEvent, app: &mut App) -> AppResult<()>
                 // correctly in database.rs
                 // If you are reading this from 4050 I'm sorry.
 
-                let default_start_date = NaiveDate::from_ymd(1500, 1, 1);
-                let default_end_date = NaiveDate::from_ymd(4050, 1, 1);
+                let default_start_date = NaiveDate::from_ymd_opt(1500, 1, 1).unwrap();
+                let default_end_date = NaiveDate::from_ymd_opt(4050, 1, 1).unwrap();
                 let start_date = NaiveDate::parse_from_str(&start_date, "%Y-%m-%d")
                     .unwrap_or(default_start_date.into());
                 let end_date = NaiveDate::parse_from_str(&end_date, "%Y-%m-%d")
