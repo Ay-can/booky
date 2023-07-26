@@ -48,7 +48,6 @@ impl EventHandler {
                             CrosstermEvent::Key(e) => sender.send(Event::Key(e)),
                             CrosstermEvent::Mouse(e) => sender.send(Event::Mouse(e)),
                             CrosstermEvent::Resize(w, h) => sender.send(Event::Resize(w, h)),
-                            // On focus lost pause the event loop until focus is regained.
                             CrosstermEvent::FocusLost => continue,
                             CrosstermEvent::FocusGained => continue,
                             _ => unimplemented!("unhandled event"),
