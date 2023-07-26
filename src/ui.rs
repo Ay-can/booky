@@ -108,7 +108,7 @@ fn render_main<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
 fn render_add_popup<B: Backend>(app: &mut App, frame: &mut Frame<'_, B>) {
     if app.add_popup {
         let block = Block::default().title("Add New Book").borders(Borders::ALL);
-        let area = centered_rect(45, 55, frame.size());
+        let area = centered_rect(45, 60, frame.size());
         let block_inner = block.inner(area);
         frame.render_widget(Clear, area);
         frame.render_widget(Paragraph::new("").block(block), area);
