@@ -6,43 +6,23 @@ use crate::database::models::*;
 use crate::database::schema::books::dsl::books;
 use crate::database::schema::books::*;
 use diesel::prelude::*;
-use diesel::sqlite::Sqlite;
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use dirs_2::document_dir;
 
-use std::error::Error;
-use std::fs;
-
-const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
-
-// Create migrations at runtime instead if using diesel cli
-fn run_migrations(
-    connection: &mut impl MigrationHarness<Sqlite>,
-) -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
-    connection.run_pending_migrations(MIGRATIONS)?;
-    Ok(())
+pub fn get_db_path() -> String {
+    document_dir()
+        .expect("Failed to find /Documents")
+        .join("booky")
+        .join("books.db")
+        .display()
+        .to_string()
 }
 
 pub fn establish_connection() -> SqliteConnection {
-    let booky_dir = document_dir()
-        .expect("Failed to create booky directory in /Documents")
-        .join("booky");
-
-    if !booky_dir.exists() {
-        fs::create_dir(booky_dir).expect("Failed to create booky directory");
-    }
-
-    let document_path = document_dir()
-        .expect("Failed to find /Documents")
-        .join("booky")
-        .join("books.db");
-    let document_path = document_path.display().to_string();
-
     // Sqlite will automatically create books.db if it does't exist
-    let mut connection = SqliteConnection::establish(&document_path)
-        .unwrap_or_else(|_| panic!("Error connecting to"));
-
-    run_migrations(&mut connection).expect("Failed to run migrations");
+    let path = get_db_path();
+    let mut connection =
+        SqliteConnection::establish(&path).unwrap_or_else(|_| panic!("Error connecting to"));
     connection
 }
 
